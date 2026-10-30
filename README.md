@@ -49,6 +49,14 @@ To change any text, edit both `src/i18n/de.ts` and `src/i18n/en.ts`. TypeScript 
 
 ## Deployment
 
-The site is plain static files on an Apache host. Run `npm run build` and upload the contents of `dist/`, including the two hidden `.htaccess` files. They set up the German and English 404 pages, long-term caching for the hashed assets in `_astro/`, and gzip compression.
+The site is plain static files on an Apache host, and [GitHub Actions](.github/workflows/deploy.yml) deploys it on every push to `main`:
+
+1. **Check & build:** `npm ci`, `astro check` and `astro build`. This also runs on every pull request.
+2. **Upload:** `dist/` goes to the webhoster over FTPS with `lftp`. New assets are uploaded first, then the pages, and stale files in `_astro/` are deleted last, so visitors never get a page whose assets are missing.
+3. **Smoke test:** the live pages must match the build byte for byte, every referenced asset must load, and unknown URLs must return a real 404.
+
+The FTP credentials are secrets (`FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD`) in the `production` environment, and only `main` may deploy to it. A deploy can also be started by hand under *Actions → Deploy → Run workflow*.
+
+The two `.htaccess` files in `public/` set up the German and English 404 pages, long-term caching for the hashed assets in `_astro/`, and gzip compression.
 
 `HANDOFF.md` and the `design-*.dc.html` files are the original design brief and mockups the site was built from.

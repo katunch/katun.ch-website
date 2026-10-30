@@ -1,0 +1,117 @@
+# Every push and pull request is type-checked and built. Pushes to main (and
+# manual runs) are then uploaded to the webhoster over FTPS and smoke-tested.
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Check & build
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+
+      - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: site
+          path: dist/
+          include-hidden-files: true # the .htaccess files
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    name: Deploy to katun.ch
+    needs: build
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    environment:
+      name: production
+      url: https://katun.ch
+    concurrency:
+      group: production
+      cancel-in-progress: false
+    env:
+      SITE_URL: https://katun.ch
+    steps:
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: site
+          path: dist
+
+      - name: Install lftp
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
+
+      # Order matters: new assets first, so a page never references a file
+      # that isn't there yet; stale assets last. Only _astro/ is ever pruned,
+      # anything else the hoster keeps in the folder is left alone.
+      - name: Upload over FTPS
+        env:
+          FTP_HOST: ${{ secrets.FTP_HOST }}
+          FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
+          LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
+          REMOTE_DIR: public_html/katun.ch
+        run: |
+          for name in FTP_HOST FTP_USERNAME LFTP_PASSWORD; do
+            if [ -z "${!name}" ]; then
+              echo "::error::$name is empty. Add the FTP_HOST, FTP_USERNAME and FTP_PASSWORD secrets to the production environment."
+              exit 1
+            fi
+          done
+          lftp <<EOF
+          set cmd:fail-exit yes
+          set ftp:ssl-force yes
+          set ftp:ssl-protect-data yes
+          set ssl:verify-certificate yes
+          set net:max-retries 3
+          set net:reconnect-interval-base 5
+          open --env-password -u "$FTP_USERNAME" "ftp://$FTP_HOST"
+          cd "$REMOTE_DIR"
+          mirror --reverse --no-perms --parallel=4 --verbose dist/_astro _astro
+          mirror --reverse --no-perms --parallel=4 --verbose --exclude-glob _astro/ dist .
+          mirror --reverse --no-perms --verbose --delete dist/_astro _astro
+          EOF
+
+      - name: Smoke test
+        run: |
+          set -euo pipefail
+          # The live pages are byte for byte what this run built,
+          for page in / /en/; do
+            curl -fsS --compressed --retry 3 "$SITE_URL$page" -o live.html
+            if ! cmp -s live.html "dist${page}index.html"; then
+              echo "::error::$SITE_URL$page is not the version this run built"
+              exit 1
+            fi
+          done
+          # every asset they reference loads,
+          grep -ohE '/_astro/[A-Za-z0-9._/-]+' dist/index.html dist/en/index.html | sort -u | while read -r asset; do
+            curl -fsS -o /dev/null --retry 3 "$SITE_URL$asset" || { echo "::error::$SITE_URL$asset doesn't load"; exit 1; }
+          done
+          # and unknown paths get the 404 page with a real 404 status.
+          for path in /smoke-test-missing-page /en/smoke-test-missing-page; do
+            status=$(curl -s -o /dev/null -w '%{http_code}' "$SITE_URL$path")
+            if [ "$status" != 404 ]; then
+              echo "::error::$SITE_URL$path returned $status instead of 404"
+              exit 1
+            fi
+          done
+          echo "$SITE_URL serves this build"

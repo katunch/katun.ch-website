@@ -35,4 +35,10 @@ There are no tests. Verify changes in a browser at 360, 390, 768 and 1440 px, in
 
 ## Deploy
 
-Manual: `npm run build`, then upload the *contents* of `dist/` via FTP to the web root of an Apache host, including both hidden `.htaccess` files and `_astro/`. Asset names are content-hashed, so old `_astro/` files can be deleted after an upload. `site` in `astro.config.mjs` (`https://katun.ch`) is used for the canonical, hreflang and OG URLs. Don't set up CI or another host without asking.
+Pushing to `main` deploys to production. `.github/workflows/deploy.yml` checks and builds the site (pull requests too), uploads `dist/` over FTPS with `lftp` to `public_html/katun.ch` on an Apache host, then smoke-tests https://katun.ch. The smoke test requires the live `/` and `/en/` to match the build byte for byte, so anything that rewrites HTML on the server will fail it.
+
+- Secrets `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD` live in the GitHub `production` environment, which only `main` can deploy to.
+- The upload only ever deletes inside `_astro/` (content-hashed, stale after a build). Keep it that way; the folder on the host may hold files the host needs.
+- Actions are pinned to commit SHAs with the version in a comment; update both together.
+- `site` in `astro.config.mjs` (`https://katun.ch`) is used for the canonical, hreflang and OG URLs.
+- Don't push to `main` without being asked: it goes live.
