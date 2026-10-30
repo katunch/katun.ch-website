@@ -61,6 +61,7 @@ jobs:
       - name: Install lftp
         run: sudo apt-get update -qq && sudo apt-get install -y -qq lftp
 
+      # The deploy account's login folder is the web root (public_html/katun.ch).
       # Order matters: new assets first, so a page never references a file
       # that isn't there yet; stale assets last. Only _astro/ is ever pruned,
       # anything else the hoster keeps in the folder is left alone.
@@ -69,7 +70,6 @@ jobs:
           FTP_HOST: ${{ secrets.FTP_HOST }}
           FTP_USERNAME: ${{ secrets.FTP_USERNAME }}
           LFTP_PASSWORD: ${{ secrets.FTP_PASSWORD }}
-          REMOTE_DIR: public_html/katun.ch
         run: |
           for name in FTP_HOST FTP_USERNAME LFTP_PASSWORD; do
             if [ -z "${!name}" ]; then
@@ -85,7 +85,6 @@ jobs:
           set net:max-retries 3
           set net:reconnect-interval-base 5
           open --env-password -u "$FTP_USERNAME" "ftp://$FTP_HOST"
-          cd "$REMOTE_DIR"
           mirror --reverse --no-perms --parallel=4 --verbose dist/_astro _astro
           mirror --reverse --no-perms --parallel=4 --verbose --exclude-glob _astro/ dist .
           mirror --reverse --no-perms --verbose --delete dist/_astro _astro

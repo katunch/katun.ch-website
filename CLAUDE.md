@@ -35,7 +35,7 @@ There are no tests. Verify changes in a browser at 360, 390, 768 and 1440 px, in
 
 ## Deploy
 
-Pushing to `main` deploys to production. `.github/workflows/deploy.yml` checks and builds the site (pull requests too), uploads `dist/` over FTPS with `lftp` to `public_html/katun.ch` on an Apache host, then smoke-tests https://katun.ch. The smoke test requires the live `/` and `/en/` to match the build byte for byte, so anything that rewrites HTML on the server will fail it.
+Pushing to `main` deploys to production. `.github/workflows/deploy.yml` checks and builds the site (pull requests too), uploads `dist/` over FTPS with `lftp` to an Apache host (a dedicated FTP account whose login folder is the web root, `public_html/katun.ch`), then smoke-tests https://katun.ch. The smoke test requires the live `/` and `/en/` to match the build byte for byte, so anything that rewrites HTML on the server will fail it.
 
 - Secrets `FTP_HOST`, `FTP_USERNAME`, `FTP_PASSWORD` live in the GitHub `production` environment, which only `main` can deploy to.
 - The upload only ever deletes inside `_astro/` (content-hashed, stale after a build). Keep it that way; the folder on the host may hold files the host needs.
