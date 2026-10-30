@@ -65,6 +65,9 @@ jobs:
       # Order matters: new assets first, so a page never references a file
       # that isn't there yet; stale assets last. Only _astro/ is ever pruned,
       # anything else the hoster keeps in the folder is left alone.
+      # Files are uploaded under a temporary name and renamed into place, so a
+      # visitor never hits a half-written or missing file. Assets are skipped
+      # when unchanged (their names are content hashes); pages always go up.
       - name: Upload over FTPS
         env:
           FTP_HOST: ${{ secrets.FTP_HOST }}
@@ -84,10 +87,11 @@ jobs:
           set ssl:verify-certificate yes
           set net:max-retries 3
           set net:reconnect-interval-base 5
+          set xfer:use-temp-file yes
           open --env-password -u "$FTP_USERNAME" "ftp://$FTP_HOST"
-          mirror --reverse --no-perms --parallel=4 --verbose dist/_astro _astro
-          mirror --reverse --no-perms --parallel=4 --verbose --exclude-glob _astro/ dist .
-          mirror --reverse --no-perms --verbose --delete dist/_astro _astro
+          mirror --reverse --overwrite --no-perms --parallel=4 --verbose dist/_astro _astro
+          mirror --reverse --overwrite --no-perms --parallel=4 --verbose --transfer-all --exclude-glob _astro/ dist .
+          mirror --reverse --overwrite --no-perms --verbose --delete dist/_astro _astro
           EOF
 
       - name: Smoke test
