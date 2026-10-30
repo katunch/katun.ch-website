@@ -1,0 +1,154 @@
+---
+interface Props {
+  period: string;
+  title: string;
+  org: string;
+  /** Still running: filled dot, brighter period. */
+  active?: boolean;
+  tag?: { label: string; accent?: boolean };
+}
+
+const { period, title, org, active = false, tag } = Astro.props;
+---
+
+<li class:list={['runlog-row', { 'runlog-row--active': active }]}>
+  <div class="runlog-row__period">{period}</div>
+  <div class="runlog-row__rail" aria-hidden="true"><span class="runlog-row__dot"></span></div>
+  <div class="runlog-row__body">
+    <div class="runlog-row__head">
+      <h3 class="runlog-row__title">{title}</h3>
+      {tag && <span class:list={['tag', { 'tag--accent': tag.accent }]}>{tag.label}</span>}
+    </div>
+    <p class="runlog-row__org">{org}</p>
+  </div>
+</li>
+
+<style>
+  .runlog-row {
+    --dot-y: 28px;
+
+    display: grid;
+    grid-template-columns: minmax(92px, 160px) 28px minmax(0, 1fr);
+    grid-template-areas: 'period rail body';
+    column-gap: 18px;
+  }
+
+  .runlog-row__period {
+    grid-area: period;
+    padding: 24px 0;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--text-muted);
+  }
+
+  .runlog-row--active .runlog-row__period {
+    color: var(--text-body);
+  }
+
+  /* Rail: a vertical line through every dot, trimmed at both ends. */
+  .runlog-row__rail {
+    grid-area: rail;
+    position: relative;
+    display: flex;
+    justify-content: center;
+  }
+
+  .runlog-row__rail::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--chip-border);
+  }
+
+  .runlog-row:first-child .runlog-row__rail::before {
+    top: calc(var(--dot-y) + 4px);
+  }
+
+  .runlog-row:last-child .runlog-row__rail::before {
+    bottom: auto;
+    height: calc(var(--dot-y) + 8px);
+  }
+
+  .runlog-row__dot {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    margin-top: var(--dot-y);
+    border: 2px solid var(--dot-past);
+    border-radius: 50%;
+    background: var(--bg);
+    box-shadow: 0 0 0 5px var(--bg);
+  }
+
+  .runlog-row--active .runlog-row__dot {
+    border-color: var(--accent);
+    background: var(--accent);
+  }
+
+  .runlog-row__body {
+    grid-area: body;
+    padding: 18px 0 26px;
+    border-bottom: 1px solid var(--line-soft);
+  }
+
+  .runlog-row:last-child .runlog-row__body {
+    border-bottom: 0;
+  }
+
+  .runlog-row__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 14px;
+  }
+
+  .runlog-row__title {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(26px, 2.6vw, 34px);
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .runlog-row__org {
+    margin-top: 6px;
+    color: var(--text-muted);
+  }
+
+  .tag {
+    padding: 3px 10px;
+    border: 1px solid var(--ghost-border);
+    border-radius: 999px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .tag--accent {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* Narrow screens: period moves above the title, the rail stays on the left. */
+  @media (max-width: 40rem) {
+    .runlog-row {
+      --dot-y: 20px;
+
+      grid-template-columns: 28px minmax(0, 1fr);
+      grid-template-areas:
+        'rail period'
+        'rail body';
+      column-gap: 14px;
+    }
+
+    .runlog-row__period {
+      padding: 16px 0 0;
+    }
+
+    .runlog-row__body {
+      padding-top: 6px;
+    }
+  }
+</style>

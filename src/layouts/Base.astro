@@ -1,0 +1,88 @@
+---
+import { Font } from 'astro:assets';
+import { getAbsoluteLocaleUrl } from 'astro:i18n';
+import { site } from '../data/site';
+import { defaultLocale, getDictionary, getLocale, locales } from '../i18n';
+import '../styles/global.css';
+
+interface Props {
+  /** Error page: its own title, kept out of search results, no canonical URL or share metadata. */
+  notFound?: boolean;
+}
+
+const { notFound = false } = Astro.props;
+const locale = getLocale(Astro.currentLocale);
+const t = getDictionary(locale);
+const canonical = getAbsoluteLocaleUrl(locale);
+const ogImage = new URL('og.png', canonical);
+const alternates = locales.map((code) => ({ hreflang: code, href: getAbsoluteLocaleUrl(code) }));
+---
+
+<!doctype html>
+<html lang={t.lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{notFound ? t.notFound.title : t.meta.title}</title>
+    <meta name="author" content={site.name} />
+    {
+      notFound ? (
+        <meta name="robots" content="noindex" />
+      ) : (
+        <>
+          <meta name="description" content={t.meta.description} />
+          <link rel="canonical" href={canonical} />
+          {alternates.map(({ hreflang, href }) => <link rel="alternate" hreflang={hreflang} href={href} />)}
+          <link rel="alternate" hreflang="x-default" href={getAbsoluteLocaleUrl(defaultLocale)} />
+        </>
+      )
+    }
+
+    <meta name="theme-color" content="#0d0d0c" />
+    <script is:inline>
+      // Resolve the theme before first paint: dark, unless the visitor switched to light.
+      (() => {
+        let theme = 'dark';
+        try {
+          if (localStorage.getItem('theme') === 'light') theme = 'light';
+        } catch {}
+        document.documentElement.dataset.theme = theme;
+        document.querySelector('meta[name="theme-color"]').content = theme === 'light' ? '#f2efe8' : '#0d0d0c';
+      })();
+    </script>
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+
+    {
+      !notFound && (
+        <>
+          <meta property="og:type" content="website" />
+          <meta property="og:site_name" content={site.domain} />
+          <meta property="og:url" content={canonical} />
+          <meta property="og:title" content={t.meta.title} />
+          <meta property="og:description" content={t.meta.description} />
+          <meta property="og:locale" content={t.ogLocale} />
+          {
+            locales
+              .filter((code) => code !== locale)
+              .map((code) => <meta property="og:locale:alternate" content={getDictionary(code).ogLocale} />)
+          }
+          <meta property="og:image" content={ogImage} />
+          <meta property="og:image:width" content="1200" />
+          <meta property="og:image:height" content="630" />
+          <meta property="og:image:alt" content={`${t.hero.title.join(' ')} — ${site.name}, ${site.domain}`} />
+          <meta name="twitter:card" content="summary_large_image" />
+        </>
+      )
+    }
+
+    <Font cssVariable="--font-display" preload={[{ weight: 800, subset: 'latin' }]} />
+    <Font cssVariable="--font-body" preload={[{ weight: 400, subset: 'latin' }]} />
+    <Font cssVariable="--font-mono" preload={[{ weight: 400, subset: 'latin' }]} />
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

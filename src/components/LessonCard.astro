@@ -1,0 +1,36 @@
+---
+import Icon from './Icon.astro';
+
+interface Props {
+  icon: 'checklist' | 'wave' | 'pulse';
+  title: string;
+  body: string;
+}
+
+const { icon, title, body } = Astro.props;
+---
+
+<div class="card lesson lift">
+  <Icon name={icon} size={30} class="lesson__icon" />
+  <h4 class="lesson__title">{title}</h4>
+  <p class="lesson__body">{body}</p>
+</div>
+
+<style>
+  .lesson :global(.lesson__icon) {
+    color: var(--accent);
+  }
+
+  .lesson__title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .lesson__body {
+    font-size: 17px;
+    color: var(--text-muted);
+  }
+</style>

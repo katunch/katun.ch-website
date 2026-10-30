@@ -1,0 +1,55 @@
+---
+// Decorative line icons (24×24 grid). Colour follows `currentColor`.
+interface Props {
+  name: 'checklist' | 'wave' | 'pulse' | 'camera' | 'sun' | 'moon';
+  size?: number;
+  strokeWidth?: number;
+  class?: string;
+}
+
+const { name, size = 24, strokeWidth = 1.75, class: className } = Astro.props;
+---
+
+<svg
+  class={className}
+  viewBox="0 0 24 24"
+  width={size}
+  height={size}
+  fill="none"
+  stroke="currentColor"
+  stroke-width={strokeWidth}
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {
+    name === 'checklist' && (
+      <>
+        <path d="M10 6h10M10 12h10M10 18h10" />
+        <path d="M3.5 6l1.5 1.5L7.5 5" />
+        <path d="M3.5 12l1.5 1.5L7.5 11" />
+        <path d="M3.5 18l1.5 1.5L7.5 17" />
+      </>
+    )
+  }
+  {name === 'wave' && <path d="M2 12c2.5-5 5.5-5 8 0s5.5 5 8 0c1-2 2.5-3 4-3" />}
+  {name === 'pulse' && <path d="M3 12h4l3-7 4 14 3-7h4" />}
+  {
+    name === 'camera' && (
+      <>
+        <path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
+        <circle cx="12" cy="13" r="3.5" />
+      </>
+    )
+  }
+  {
+    name === 'sun' && (
+      <>
+        <circle cx="12" cy="12" r="4" />
+        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" />
+      </>
+    )
+  }
+  {name === 'moon' && <path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" />}
+</svg>

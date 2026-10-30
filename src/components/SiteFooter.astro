@@ -1,0 +1,42 @@
+---
+import { getDictionary } from '../i18n';
+
+const { footer, motto } = getDictionary(Astro.currentLocale);
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <span>© 2026 Silas Knobel · Sirnach, Thurgau, CH</span>
+    <span>{motto}</span>
+    <span class="site-footer__status"><span class="dot" aria-hidden="true"></span>{footer.status}</span>
+  </div>
+</footer>
+
+<style>
+  /* A dark island in both themes. */
+  .site-footer {
+    background: var(--footer-bg);
+    border-top: 1px solid var(--footer-border);
+  }
+
+  .site-footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 12px 32px;
+    padding-block: 28px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--footer-text);
+  }
+
+  .site-footer__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .site-footer__status .dot {
+    background: var(--island-ok);
+  }
+</style>

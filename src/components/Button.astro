@@ -1,0 +1,72 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+
+interface Props extends HTMLAttributes<'a'> {
+  href: string;
+  /** primary = accent fill, ghost = outline, ink = header CTA (outline in dark, solid ink in light) */
+  variant?: 'primary' | 'ghost' | 'ink';
+  size?: 'sm' | 'md' | 'lg';
+  /** Leading status dot */
+  dot?: boolean;
+}
+
+const { variant = 'ghost', size = 'md', dot = false, class: className, ...attrs } = Astro.props;
+---
+
+<a class:list={['btn', `btn--${variant}`, `btn--${size}`, 'lift', className]} {...attrs}>
+  {dot && <span class="dot" aria-hidden="true" />}
+  <slot />
+</a>
+
+<style>
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 50px;
+    padding: 0 22px;
+    border: 1px solid;
+    border-radius: 6px;
+    font-family: var(--font-mono);
+    font-size: 15px;
+  }
+
+  .btn--sm {
+    min-height: 44px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+
+  .btn--lg {
+    min-height: 52px;
+  }
+
+  .btn--primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+    font-weight: 500;
+  }
+
+  .btn--ghost {
+    background: var(--ghost-bg);
+    border-color: var(--ghost-border);
+    color: var(--text);
+  }
+
+  .btn--ink {
+    background: var(--cta-bg);
+    border-color: var(--cta-border);
+    color: var(--cta-text);
+  }
+
+  .btn--ink .dot {
+    background: var(--term-accent);
+  }
+
+  @media (hover: hover) {
+    .btn--ghost:hover {
+      border-color: var(--line-strong);
+    }
+  }
+</style>

@@ -1,0 +1,358 @@
+/* ==========================================================================
+   Design tokens
+   Dark ("asphalt & amber") is the default; light ("paper & burnt orange")
+   applies via [data-theme="light"], set in <head> before first paint.
+   ========================================================================== */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #0d0d0c;
+  --surface: #141412;
+  --section-alt: #11110f;
+  --text: #ede9e3;
+  --text-body: #c9c5bd;
+  --text-muted: #a39f97;
+  --text-dim: #8c887f;
+  --line: #262622;
+  --chip-border: #33332e;
+  --ghost-border: #3a3a34;
+  --grid-line: #1a1a17;
+  --accent: #ff7a1a;
+  --on-accent: #0d0d0c;
+  --term-accent: #ff7a1a;
+
+  /* Supporting tones */
+  --line-soft: #1f1f1c;
+  --line-strong: #55554c;
+  --ghost-bg: transparent;
+  --lift-shadow: none;
+  --rule: 1px solid var(--line);
+  --dot-past: #77736c;
+
+  /* Ride band */
+  --band-surface: #0d0d0c;
+  --band-line: #2a2a26;
+  --band-dim: #8c887f;
+  --photo-bg: #181816;
+  --gauge-track: #2e2e29;
+
+  /* Header CTA */
+  --cta-bg: transparent;
+  --cta-border: #3a3a34;
+  --cta-text: #ede9e3;
+
+  /* Dark islands: terminal, marquee, footer */
+  --term-bg: #121210;
+  --term-bar: #181816;
+  --term-border: #2a2a26;
+  --term-shadow: 0 30px 80px rgb(0 0 0 / 0.5);
+  --marquee-bg: #0f0f0d;
+  --marquee-text: #a39f97;
+  --marquee-strong: #ede9e3;
+  --marquee-border: #262622;
+  --footer-bg: #0d0d0c;
+  --footer-text: #8c887f;
+  --footer-border: #262622;
+
+  /* Island text is the same in both themes */
+  --island-text: #ede9e3;
+  --island-muted: #a39f97;
+  --island-dim: #8c887f;
+  --island-line: #2a2a26;
+  --island-knob: #3a3a34;
+  --island-ok: #3fb950;
+
+  /* GitHub language colours */
+  --lang-hcl: #844fba;
+  --lang-javascript: #f1e05a;
+  --lang-coffeescript: #5a7fb8;
+  --lang-ring: transparent;
+
+  /* Layout */
+  --page-max: 1280px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --section-space: clamp(72px, 9vw, 128px);
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: #f2efe8;
+  --surface: #fbfaf7;
+  --section-alt: #ece8df;
+  --text: #151513;
+  --text-body: #3a3833;
+  --text-muted: #57534c;
+  --text-dim: #67635b;
+  --line: #d9d4c9;
+  --chip-border: #cfc9bd;
+  --ghost-border: #bdb6a8;
+  --grid-line: #e3ded3;
+  --accent: #b83c0c;
+  --on-accent: #fbfaf7;
+  --term-accent: #ff8a4c;
+
+  --line-soft: #e2ddd3;
+  --line-strong: #a39c8e;
+  --ghost-bg: var(--surface);
+  --lift-shadow: 0 14px 34px rgb(21 21 19 / 0.08);
+  --rule: 2px solid var(--text);
+  --dot-past: #8c877d;
+
+  --band-surface: #fbfaf7;
+  --band-line: #cfc9bd;
+  --band-dim: #57534c;
+  --photo-bg: #fbfaf7;
+  --gauge-track: #d9d4c9;
+
+  --cta-bg: #151513;
+  --cta-border: #151513;
+  --cta-text: #f2efe8;
+
+  --term-bg: #151513;
+  --term-bar: #1e1e1b;
+  --term-border: #151513;
+  --term-shadow: 0 30px 70px rgb(21 21 19 / 0.22);
+  --marquee-bg: #151513;
+  --marquee-text: #c9c5bd;
+  --marquee-strong: #fbfaf7;
+  --marquee-border: #151513;
+  --footer-bg: #151513;
+  --footer-text: #a39f97;
+  --footer-border: #151513;
+
+  --lang-coffeescript: #244776;
+  --lang-ring: rgb(21 21 19 / 0.25);
+}
+
+/* ==========================================================================
+   Base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 1.55;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+figure,
+dl,
+dd {
+  margin: 0;
+}
+
+svg {
+  display: block;
+}
+
+button {
+  font: inherit;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Layout & shared primitives
+   ========================================================================== */
+
+.container {
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.text-accent {
+  color: var(--accent);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Inline text link (accent, mono) */
+.text-link {
+  display: inline-flex;
+  padding: 10px 0;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--accent);
+  text-underline-offset: 4px;
+}
+
+.text-link:hover {
+  text-decoration: underline;
+}
+
+/* Square 44px control in the header (theme, language) */
+.icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid var(--ghost-border);
+  border-radius: 6px;
+  background: var(--ghost-bg);
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+@media (hover: hover) {
+  .icon-button:hover {
+    border-color: var(--line-strong);
+    color: var(--text);
+  }
+}
+
+/* Card: shared surface for "now", repo and lesson cards */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 28px;
+  background: var(--card-bg, var(--surface));
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+
+/* Subtle hover lift for cards, rows and buttons */
+.lift {
+  transition:
+    border-color 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+@media (hover: hover) {
+  .lift:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lift-shadow);
+  }
+
+  .card.lift:hover {
+    border-color: var(--line-strong);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lift {
+    transition: none;
+  }
+
+  .lift:hover {
+    transform: none;
+  }
+}
+
+/* Bracketed placeholder Silas still has to fill in */
+.placeholder {
+  color: var(--accent);
+  border-bottom: 1px dashed currentColor;
+}
+
+/* Small round status / legend dot */
+.dot {
+  flex: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Hero blueprint grid */
+.blueprint {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 56px 56px;
+  background-position: -1px -1px;
+}
+
+/* Intro paragraph */
+.lead {
+  font-size: clamp(18px, 1.6vw, 21px);
+  color: var(--text-body);
+}
+
+.button-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Responsive card grid: as many 320px+ columns as fit */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+  gap: 16px;
+}
+
+/* Skip link: hidden until focused */
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 10;
+  padding: 10px 16px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  border-radius: 6px;
+  transform: translateY(-200%);
+}
+
+.skip-link:focus-visible {
+  transform: none;
+}

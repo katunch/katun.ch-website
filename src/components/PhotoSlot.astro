@@ -1,0 +1,120 @@
+---
+import type { ImageMetadata } from 'astro';
+import { Image } from 'astro:assets';
+import { getDictionary } from '../i18n';
+import Icon from './Icon.astro';
+
+// Pass `src` (an imported image) and `alt` to replace the placeholder frame with the photo.
+interface Props {
+  caption: string;
+  src?: ImageMetadata;
+  alt?: string;
+}
+
+const { caption, src, alt = '' } = Astro.props;
+const { photo } = getDictionary(Astro.currentLocale).ride;
+const corners = ['tl', 'tr', 'bl', 'br'];
+---
+
+<figure class="photo">
+  {
+    src ? (
+      <Image class="photo__image" src={src} alt={alt} widths={[420, 640, 960, 1200]} sizes="(min-width: 64rem) 560px, 100vw" />
+    ) : (
+      <div class="photo__frame">
+        {corners.map((corner) => <span class={`photo__corner photo__corner--${corner}`} aria-hidden="true" />)}
+        <Icon name="camera" size={40} strokeWidth={1.5} class="photo__icon" />
+        <span class="photo__label">{photo.label}</span>
+        <span class="photo__hint">{photo.hint}</span>
+      </div>
+    )
+  }
+  <figcaption class="photo__caption">{caption}</figcaption>
+</figure>
+
+<style>
+  .photo {
+    min-width: 0;
+  }
+
+  .photo__frame,
+  .photo :global(.photo__image) {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    border-radius: 8px;
+  }
+
+  .photo :global(.photo__image) {
+    display: block;
+    object-fit: cover;
+  }
+
+  .photo__frame {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 24px;
+    background: var(--photo-bg);
+    border: 1px dashed var(--ghost-border);
+    text-align: center;
+    font-family: var(--font-mono);
+  }
+
+  .photo__corner {
+    position: absolute;
+    width: 28px;
+    height: 28px;
+    border: 0 solid var(--accent);
+  }
+
+  .photo__corner--tl {
+    top: 18px;
+    left: 18px;
+    border-width: 2px 0 0 2px;
+  }
+
+  .photo__corner--tr {
+    top: 18px;
+    right: 18px;
+    border-width: 2px 2px 0 0;
+  }
+
+  .photo__corner--bl {
+    bottom: 18px;
+    left: 18px;
+    border-width: 0 0 2px 2px;
+  }
+
+  .photo__corner--br {
+    right: 18px;
+    bottom: 18px;
+    border-width: 0 2px 2px 0;
+  }
+
+  .photo__frame :global(.photo__icon) {
+    color: var(--text-muted);
+  }
+
+  .photo__label {
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-body);
+  }
+
+  .photo__hint {
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .photo__caption {
+    margin-top: 14px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--band-dim);
+  }
+</style>

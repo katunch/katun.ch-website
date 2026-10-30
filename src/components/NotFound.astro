@@ -1,0 +1,49 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getDictionary, getLocale } from '../i18n';
+import Base from '../layouts/Base.astro';
+import Button from './Button.astro';
+import Section from './Section.astro';
+import SiteFooter from './SiteFooter.astro';
+import SiteHeader from './SiteHeader.astro';
+
+// The 404 page; src/pages/ renders it once per language and .htaccess serves the matching one.
+const locale = getLocale(Astro.currentLocale);
+const t = getDictionary(locale);
+---
+
+<Base notFound>
+  <a class="skip-link" href="#main">{t.ui.skipLink}</a>
+  <SiteHeader linkToHome />
+
+  <main id="main" class="not-found blueprint">
+    <Section id="not-found" {...t.notFound.heading} size="xl" level={1}>
+      <p class="lead not-found__lead">{t.notFound.lead}</p>
+      <div class="button-row not-found__links">
+        <Button href={getRelativeLocaleUrl(locale)} variant="primary" size="lg">{t.notFound.back}</Button>
+      </div>
+    </Section>
+  </main>
+
+  <SiteFooter />
+</Base>
+
+<style>
+  /* Short page: keep the footer at the bottom of the window. */
+  :global(body) {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .not-found {
+    flex: 1;
+  }
+
+  .not-found__lead {
+    max-width: 600px;
+  }
+
+  .not-found__links {
+    margin-top: 40px;
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import { getDictionary } from '../i18n';
+
+const { marquee } = getDictionary(Astro.currentLocale);
+---
+
+<!-- Decorative: the same list lives in the Stack section. Rendered twice for a seamless loop. -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track">
+    {[0, 1].map(() => (
+      <div class="marquee__group">
+        {marquee.map(({ label, strong }) => (
+          <>
+            <span class:list={[{ 'marquee__item--strong': strong }]}>{label}</span>
+            <span class="marquee__sep">◆</span>
+          </>
+        ))}
+      </div>
+    ))}
+  </div>
+  <div class="marquee__lane"></div>
+</div>
+
+<style>
+  /* A dark island in both themes. */
+  .marquee {
+    overflow: hidden;
+    background: var(--marquee-bg);
+    border-bottom: 1px solid var(--marquee-border);
+  }
+
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    padding-block: 18px;
+    animation: marquee 52s linear infinite;
+  }
+
+  .marquee__group {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding-right: 28px;
+    white-space: nowrap;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--marquee-text);
+  }
+
+  .marquee__item--strong {
+    color: var(--marquee-strong);
+  }
+
+  .marquee__sep {
+    font-size: 16px;
+    color: var(--term-accent);
+  }
+
+  /* Dashed "lane line" under the band, light theme only. */
+  .marquee__lane {
+    display: none;
+    height: 4px;
+    margin-bottom: 14px;
+    background-image: repeating-linear-gradient(90deg, var(--term-accent) 0 56px, transparent 56px 96px);
+  }
+
+  :global([data-theme='light']) .marquee__track {
+    padding-bottom: 14px;
+  }
+
+  :global([data-theme='light']) .marquee__lane {
+    display: block;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .marquee__track {
+      animation: none;
+    }
+  }
+</style>

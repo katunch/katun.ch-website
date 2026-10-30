@@ -1,0 +1,196 @@
+---
+import { highlightYaml } from '../lib/yaml';
+
+interface Props {
+  files: { name: string; yaml: string }[];
+  /** Accessible name of the tab list. */
+  label: string;
+}
+
+const { files, label } = Astro.props;
+
+const tabs = files.map((file, index) => {
+  const id = file.name.replace(/\W+/g, '-');
+  return {
+    name: file.name,
+    tabId: `tab-${id}`,
+    panelId: `panel-${id}`,
+    selected: index === 0,
+    lines: highlightYaml(file.yaml),
+  };
+});
+---
+
+<div class="terminal" data-tabs>
+  <div class="terminal__bar">
+    <div class="terminal__knobs" aria-hidden="true"><span></span><span></span><span></span></div>
+    <div class="terminal__tabs" role="tablist" aria-label={label}>
+      {tabs.map((tab) => (
+        <button
+          type="button"
+          class="terminal__tab"
+          role="tab"
+          id={tab.tabId}
+          aria-controls={tab.panelId}
+          aria-selected={tab.selected ? 'true' : 'false'}
+          tabindex={tab.selected ? 0 : -1}
+        >
+          {tab.name}
+        </button>
+      ))}
+    </div>
+  </div>
+
+  {tabs.map((tab) => (
+    <div class="terminal__panel" role="tabpanel" id={tab.panelId} aria-labelledby={tab.tabId} tabindex="0" hidden={!tab.selected}>
+      {tab.lines.map((tokens, index) => (
+        <div class="line">
+          <span class="line__number" aria-hidden="true">{index + 1}</span>
+          <span>{tokens.map(({ text, kind }) => (kind ? <span class={`tok-${kind}`}>{text}</span> : text))}</span>
+        </div>
+      ))}
+    </div>
+  ))}
+</div>
+
+<script>
+  // Accessible tabs: click, ←/→ to move (wrapping), Home/End to jump.
+  for (const root of document.querySelectorAll<HTMLElement>('[data-tabs]')) {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+
+    const select = (next: HTMLButtonElement) => {
+      for (const tab of tabs) {
+        const selected = tab === next;
+        tab.setAttribute('aria-selected', String(selected));
+        tab.tabIndex = selected ? 0 : -1;
+        const panel = document.getElementById(tab.getAttribute('aria-controls') ?? '');
+        if (panel) panel.hidden = !selected;
+      }
+    };
+
+    for (const tab of tabs) {
+      tab.addEventListener('click', () => select(tab));
+      tab.addEventListener('keydown', (event) => {
+        const index = tabs.indexOf(tab);
+        const target = {
+          ArrowRight: index + 1,
+          ArrowLeft: index - 1,
+          Home: 0,
+          End: tabs.length - 1,
+        }[event.key];
+        if (target === undefined) return;
+        event.preventDefault();
+        const next = tabs[(target + tabs.length) % tabs.length];
+        select(next);
+        next.focus();
+      });
+    }
+  }
+</script>
+
+<style>
+  /* A dark island in both themes. */
+  .terminal {
+    --accent: var(--term-accent);
+
+    overflow: hidden;
+    background: var(--term-bg);
+    border: 1px solid var(--term-border);
+    border-radius: 10px;
+    box-shadow: var(--term-shadow);
+    color: var(--island-text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+    line-height: 1.75;
+  }
+
+  .terminal__bar {
+    display: flex;
+    align-items: stretch;
+    justify-content: space-between;
+    background: var(--term-bar);
+    border-bottom: 1px solid var(--island-line);
+  }
+
+  .terminal__knobs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 16px;
+  }
+
+  .terminal__knobs span {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--island-knob);
+  }
+
+  .terminal__tabs {
+    display: flex;
+  }
+
+  .terminal__tab {
+    min-height: 46px;
+    padding: 0 18px;
+    border: 0;
+    border-left: 1px solid var(--island-line);
+    background: transparent;
+    color: var(--island-muted);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    cursor: pointer;
+  }
+
+  .terminal__tab:hover {
+    color: var(--island-text);
+  }
+
+  .terminal__tab[aria-selected='true'] {
+    background: var(--term-bg);
+    color: var(--island-text);
+    box-shadow: inset 0 -2px 0 var(--accent);
+  }
+
+  /* The terminal clips its overflow, so draw focus rings inside. */
+  .terminal__tab:focus-visible,
+  .terminal__panel:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .terminal__panel {
+    padding: 20px 20px 24px;
+    overflow-x: auto;
+  }
+
+  .line {
+    display: flex;
+    gap: 18px;
+    white-space: pre;
+  }
+
+  .line__number {
+    flex: none;
+    width: 20px;
+    text-align: right;
+    color: var(--island-dim);
+  }
+
+  .tok-key {
+    color: var(--island-muted);
+  }
+
+  .tok-punct,
+  .tok-comment {
+    color: var(--island-dim);
+  }
+
+  .tok-string {
+    color: var(--accent);
+  }
+
+  .tok-placeholder {
+    color: var(--accent);
+    border-bottom: 1px dashed currentColor;
+  }
+</style>

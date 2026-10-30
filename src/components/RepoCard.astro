@@ -1,0 +1,93 @@
+---
+import { getDictionary } from '../i18n';
+
+interface Props {
+  owner: string;
+  name: string;
+  description: string;
+  language: string;
+  stars?: number;
+  archived?: boolean;
+}
+
+const { owner, name, description, language, stars, archived = false } = Astro.props;
+const { ui } = getDictionary(Astro.currentLocale);
+const href = `https://github.com/${owner}/${name}`;
+const languageClass = `repo__lang-dot--${language.toLowerCase()}`;
+---
+
+<a class="card repo lift" href={href}>
+  <span class="repo__owner">{owner} /</span>
+  <span class="repo__name">{name}</span>
+  <span class="repo__description">{description}</span>
+  <span class="repo__meta">
+    <span class="repo__lang"><span class:list={['repo__lang-dot', languageClass]}></span>{language}</span>
+    {
+      stars !== undefined && (
+        <span>
+          <span aria-hidden="true">★</span> {stars}<span class="sr-only"> {stars === 1 ? ui.star : ui.stars}</span>
+        </span>
+      )
+    }
+    {archived && <span>{ui.archived}</span>}
+  </span>
+</a>
+
+<style>
+  .repo {
+    min-height: 240px;
+    color: var(--text);
+  }
+
+  .repo__owner {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-dim);
+  }
+
+  .repo__name {
+    font-family: var(--font-mono);
+    font-size: 18px;
+    font-weight: 500;
+    overflow-wrap: anywhere;
+  }
+
+  .repo__description {
+    font-size: 17px;
+    color: var(--text-muted);
+  }
+
+  .repo__meta {
+    display: flex;
+    gap: 18px;
+    margin-top: auto;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .repo__lang {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .repo__lang-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .repo__lang-dot--hcl {
+    background: var(--lang-hcl);
+  }
+
+  .repo__lang-dot--javascript {
+    background: var(--lang-javascript);
+    box-shadow: inset 0 0 0 1px var(--lang-ring);
+  }
+
+  .repo__lang-dot--coffeescript {
+    background: var(--lang-coffeescript);
+  }
+</style>

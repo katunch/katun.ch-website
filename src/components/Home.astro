@@ -1,0 +1,243 @@
+---
+import stelvio from '../assets/stelvio.jpg';
+import { site } from '../data/site';
+import { getDictionary } from '../i18n';
+import Base from '../layouts/Base.astro';
+import Button from './Button.astro';
+import Gauge from './Gauge.astro';
+import Hero from './Hero.astro';
+import LessonCard from './LessonCard.astro';
+import Marquee from './Marquee.astro';
+import NowCard from './NowCard.astro';
+import PhotoSlot from './PhotoSlot.astro';
+import Pipeline from './Pipeline.astro';
+import PlaceholderText from './PlaceholderText.astro';
+import RepoCard from './RepoCard.astro';
+import RunlogRow from './RunlogRow.astro';
+import Section from './Section.astro';
+import SiteFooter from './SiteFooter.astro';
+import SiteHeader from './SiteHeader.astro';
+import StackLayer from './StackLayer.astro';
+
+// The whole one-pager; src/pages/ renders it once per language.
+const t = getDictionary(Astro.currentLocale);
+---
+
+<Base>
+  <a class="skip-link" href="#main">{t.ui.skipLink}</a>
+  <SiteHeader />
+
+  <main id="main">
+    <Hero />
+    <Marquee />
+
+    <Section id="now" {...t.now.heading}>
+      <div class="card-grid">
+        {t.now.cards.map((card, i) => <NowCard number={i + 1} {...card} />)}
+      </div>
+    </Section>
+
+    <Section id="stack" {...t.stack.heading}>
+      <ul class="layers">
+        {t.stack.layers.map((layer) => <StackLayer {...layer} />)}
+      </ul>
+    </Section>
+
+    <Section id="log" {...t.runlog.heading}>
+      <ol class="runlog">
+        {t.runlog.entries.map((entry) => <RunlogRow {...entry} />)}
+      </ol>
+    </Section>
+
+    <Section id="source" {...t.source.heading} wide>
+      <div class="card-grid">
+        {t.source.repos.map((repo) => <RepoCard owner="katunch" {...repo} />)}
+      </div>
+      <a class="text-link source__all" href={site.links.githubRepos}>{t.source.allRepos}</a>
+    </Section>
+
+    <Section id="print" {...t.product.heading}>
+      <div class="product">
+        <div class="product__intro">
+          <p class="product__kicker">{t.product.kicker}</p>
+          <h3 class="product__name">Zenify<span class="text-accent">Print</span></h3>
+          <p class="lead">{t.product.lead}</p>
+          <div class="button-row product__links">
+            <Button href={site.links.zenifyPrint} variant="primary">{t.product.link}</Button>
+          </div>
+        </div>
+        <Pipeline name="zenifyprint" {...t.product.pipeline} />
+      </div>
+    </Section>
+
+    <Section id="ride" {...t.ride.heading} size="lg" band>
+      <div class="ride">
+        <PhotoSlot src={stelvio} alt={t.ride.photo.alt} caption={t.ride.photo.caption} />
+
+        <div class="ride__content">
+          <p class="lead ride__lead">{t.ride.lead}</p>
+          <div class="ride__specs">
+            <dl class="facts">
+              {
+                t.ride.facts.map(({ term, value }) => (
+                  <>
+                    <dt>{term}</dt>
+                    <dd>
+                      <PlaceholderText text={value} />
+                    </dd>
+                  </>
+                ))
+              }
+            </dl>
+            <Gauge />
+          </div>
+        </div>
+      </div>
+
+      <h3 class="lessons-title">{t.ride.lessonsTitle}</h3>
+      <div class="card-grid">
+        {t.ride.lessons.map((lesson) => <LessonCard {...lesson} />)}
+      </div>
+    </Section>
+
+    <Section id="contact" {...t.contact.heading} size="xl">
+      <p class="lead contact__lead">{t.contact.lead}</p>
+      <div class="button-row contact__links">
+        <Button href={site.links.zenify} variant="primary" size="lg">zenify ↗</Button>
+        <Button href={site.links.linkedin} size="lg" rel="me">linkedin ↗</Button>
+        <Button href={site.links.github} size="lg" rel="me">github ↗</Button>
+      </div>
+    </Section>
+  </main>
+
+  <SiteFooter />
+</Base>
+
+<style>
+  .layers,
+  .runlog {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .layers {
+    display: grid;
+    gap: 8px;
+  }
+
+  .runlog {
+    max-width: 980px;
+  }
+
+  .source__all {
+    margin-top: 24px;
+  }
+
+  .product {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 48px 64px;
+  }
+
+  .product__intro {
+    flex: 1 1 400px;
+    min-width: 0;
+  }
+
+  .product > :global(.pipeline) {
+    flex: 1 1 500px;
+    min-width: 0;
+  }
+
+  .product__kicker {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .product__name {
+    margin: 12px 0 24px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(44px, 5vw, 72px);
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+
+  .product__links {
+    margin-top: 36px;
+  }
+
+  .ride {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    gap: 48px 64px;
+  }
+
+  .ride > :global(.photo) {
+    flex: 1 1 420px;
+  }
+
+  .ride__content {
+    flex: 1 1 440px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+
+  .ride__lead {
+    font-size: clamp(19px, 1.7vw, 22px);
+  }
+
+  .ride__specs {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 32px;
+  }
+
+  .facts {
+    flex: 1 1 260px;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    border-top: 1px solid var(--band-line);
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .facts dt,
+  .facts dd {
+    padding-block: 14px;
+    border-bottom: 1px solid var(--band-line);
+  }
+
+  .facts dt {
+    padding-right: 24px;
+    color: var(--band-dim);
+  }
+
+  .lessons-title {
+    margin: clamp(64px, 8vw, 104px) 0 28px;
+    font-family: var(--font-mono);
+    font-weight: 400;
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .contact__lead {
+    max-width: 600px;
+  }
+
+  .contact__links {
+    margin-top: 40px;
+  }
+</style>

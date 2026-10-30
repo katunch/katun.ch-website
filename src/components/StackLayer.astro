@@ -1,0 +1,86 @@
+---
+interface Props {
+  level: string;
+  name: string;
+  hint: string;
+  items: string[];
+}
+
+const { level, name, hint, items } = Astro.props;
+---
+
+<li class="layer lift">
+  <div class="layer__label">
+    <span class="layer__level">{level}</span>
+    <span class="layer__name">{name}</span>
+    <span class="layer__hint">{hint}</span>
+  </div>
+  <ul class="chips">
+    {items.map((item) => <li class="chip">{item}</li>)}
+  </ul>
+</li>
+
+<style>
+  .layer {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 32px;
+    padding: 22px 26px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+
+  @media (hover: hover) {
+    .layer:hover {
+      border-color: var(--line-strong);
+    }
+  }
+
+  .layer__label {
+    flex: 0 1 300px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+  }
+
+  .layer__level {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+  }
+
+  .layer__name {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .layer__hint {
+    font-size: 15px;
+    color: var(--text-dim);
+  }
+
+  .chips {
+    flex: 1 1 320px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .chip {
+    padding: 8px 12px;
+    background: var(--bg);
+    border: 1px solid var(--chip-border);
+    border-radius: 4px;
+  }
+</style>

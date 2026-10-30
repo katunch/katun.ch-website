@@ -1,0 +1,111 @@
+---
+interface Props {
+  id: string;
+  /** e.g. "01 / Now" */
+  index: string;
+  note: string;
+  title: string;
+  /** Trailing part of the title, set in the accent colour. */
+  titleAccent?: string;
+  /** md = default section title, lg = Ride, xl = Contact */
+  size?: 'md' | 'lg' | 'xl';
+  /** Allow a slightly longer title line. */
+  wide?: boolean;
+  /** Full-bleed alternate background (Ride). */
+  band?: boolean;
+  /** 1 when the section is the page's main heading (404 page). */
+  level?: 1 | 2;
+}
+
+const { id, index, note, title, titleAccent, size = 'md', wide = false, band = false, level = 2 } = Astro.props;
+const titleId = `${id}-title`;
+const Title = level === 1 ? 'h1' : 'h2';
+---
+
+<section id={id} class:list={['section', { 'section--band': band }]} aria-labelledby={titleId}>
+  <div class="container">
+    <div class="section-header">
+      <span class="section-header__index">{index}</span>
+      <span class="section-header__note">{note}</span>
+    </div>
+    <Title id={titleId} class:list={['section-title', `section-title--${size}`, { 'section-title--wide': wide }]}>
+      {title}{titleAccent && <> <span class="section-title__accent text-accent">{titleAccent}</span></>}
+    </Title>
+    <slot />
+  </div>
+</section>
+
+<style>
+  .section {
+    padding-block: var(--section-space);
+  }
+
+  /* Consecutive plain sections share one gap. */
+  .section:not(.section--band) + .section:not(.section--band) {
+    padding-top: 0;
+  }
+
+  .section--band {
+    --card-bg: var(--band-surface);
+
+    background: var(--section-alt);
+    border-block: 1px solid var(--line);
+  }
+
+  .section-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-top: 18px;
+    border-top: var(--rule);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .section-header__index {
+    color: var(--accent);
+  }
+
+  .section-header__note {
+    color: var(--text-dim);
+  }
+
+  .section--band .section-header__note {
+    color: var(--band-dim);
+  }
+
+  .section-title {
+    margin: 28px 0 56px;
+    max-width: 14ch;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(44px, 6.4vw, 92px);
+    line-height: 0.9;
+    text-transform: uppercase;
+  }
+
+  /* The accent phrase wraps as a unit ("Letter out." never splits), unless it can't fit a line on its own. */
+  .section-title__accent {
+    display: inline-block;
+  }
+
+  .section-title--wide {
+    max-width: 16ch;
+  }
+
+  .section-title--lg {
+    max-width: 12ch;
+    font-size: clamp(52px, 8vw, 128px);
+    line-height: 0.86;
+  }
+
+  .section-title--xl {
+    max-width: 13ch;
+    margin-bottom: 32px;
+    font-size: clamp(52px, 9vw, 144px);
+    line-height: 0.86;
+  }
+</style>

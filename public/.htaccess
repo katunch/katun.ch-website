@@ -1,0 +1,41 @@
+# Apache settings for katun.ch. Lives in public/ and is copied into dist/ on every build.
+
+# Our own 404 page (German). en/.htaccess sends /en/ to the English one.
+ErrorDocument 404 /404.html
+
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/webp .webp
+  AddType image/svg+xml .svg
+</IfModule>
+
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript image/svg+xml
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Pages: always check for a new version, so a fresh upload shows up right away.
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+
+  # Fonts and photos only exist in /_astro/, under names that change whenever the
+  # file does, so browsers may keep them for a year.
+  <FilesMatch "\.(woff2|webp)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # Icons and the share image keep their names: one week.
+  <FilesMatch "\.(ico|svg|png)$">
+    Header set Cache-Control "public, max-age=604800"
+  </FilesMatch>
+</IfModule>
+
+# Send http:// and www. to https://katun.ch. Uncomment once HTTPS works for the
+# domain, unless your host already offers a "force HTTPS" switch (prefer that).
+# <IfModule mod_rewrite.c>
+#   RewriteEngine On
+#   RewriteCond %{HTTPS} off [OR]
+#   RewriteCond %{HTTP_HOST} ^www\. [NC]
+#   RewriteRule ^ https://katun.ch%{REQUEST_URI} [R=301,L]
+# </IfModule>

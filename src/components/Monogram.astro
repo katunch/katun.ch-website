@@ -1,0 +1,32 @@
+---
+// The "SK" monogram with its accent dot.
+---
+
+<span class="monogram" aria-hidden="true">SK<span class="monogram__dot"></span></span>
+
+<style>
+  .monogram {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 42px;
+    height: 42px;
+    border: 1.5px solid currentColor;
+    border-radius: 6px;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 21px;
+    letter-spacing: 0.02em;
+  }
+
+  .monogram__dot {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+  }
+</style>

@@ -1,0 +1,198 @@
+---
+import { site } from '../data/site';
+import { getDictionary } from '../i18n';
+import Button from './Button.astro';
+import Terminal from './Terminal.astro';
+
+const { hero, ui } = getDictionary(Astro.currentLocale);
+const [leadBefore, leadAfter] = hero.lead.split('{name}');
+---
+
+<section id="top" class="hero blueprint" aria-labelledby="hero-title">
+  <div class="container hero__inner">
+    <p class="prompt">
+      <span class="text-accent">silas@katun</span><span class="prompt__path">:~$</span> whoami<span class="cursor text-accent" aria-hidden="true">▍</span>
+    </p>
+    <h1 id="hero-title" class="hero__title">{hero.title[0]}<br /><span class="text-accent">{hero.title[1]}</span></h1>
+
+    <div class="hero__grid">
+      <div class="hero__intro">
+        <p class="lead">{leadBefore}<strong>{site.name}</strong>{leadAfter}</p>
+        <div class="button-row">
+          <Button href="#log" variant="primary">{hero.actions.runlog}</Button>
+          <Button href="#ride">{hero.actions.ride}</Button>
+        </div>
+        <ul class="hero__roles">
+          {hero.roles.map((role) => <li>{role}</li>)}
+        </ul>
+      </div>
+      <div class="hero__terminal">
+        <Terminal files={hero.files} label={ui.terminal} />
+      </div>
+    </div>
+
+    <ul class="readout">
+      {hero.stats.map(({ value, unit, label }) => (
+        <li class="readout__item">
+          <span class="readout__value">
+            {value}
+            {unit && <span class="readout__unit"> {unit}</span>}
+          </span>
+          <span class="readout__label">{label}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<style>
+  .hero {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .hero__inner {
+    padding-top: clamp(56px, 8vw, 112px);
+  }
+
+  .prompt {
+    margin-bottom: 28px;
+    font-family: var(--font-mono);
+    font-size: 15px;
+    color: var(--text-body);
+  }
+
+  .prompt__path {
+    color: var(--text-dim);
+  }
+
+  .cursor {
+    animation: blink 1.1s steps(1) infinite;
+  }
+
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .hero__title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(52px, 12.5vw, 190px);
+    line-height: 0.84;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+  }
+
+  /* "Viel Drehmoment." is the longest line: let it shrink further so it stays on one line. */
+  .hero__title:lang(de) {
+    font-size: clamp(40px, 12.5vw, 172px);
+  }
+
+  .hero__grid {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 48px 64px;
+    margin-top: clamp(40px, 5vw, 64px);
+  }
+
+  .hero__intro {
+    flex: 1 1 400px;
+    min-width: 0;
+  }
+
+  .hero__intro .lead {
+    max-width: 560px;
+  }
+
+  .hero__intro strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .hero__intro .button-row {
+    margin-top: 36px;
+  }
+
+  .hero__roles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 22px;
+    margin: 40px 0 0;
+    padding: 0;
+    list-style: none;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .hero__terminal {
+    flex: 1 1 500px;
+    min-width: 0;
+  }
+
+  /* Readout: hairline grid; first cell of each row sits flush with the text above. */
+  .readout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1px;
+    margin: clamp(56px, 8vw, 96px) 0 0;
+    padding: 0;
+    list-style: none;
+    background: var(--line);
+    border-top: 1px solid var(--line);
+  }
+
+  .readout__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 24px 24px 28px 0;
+    background: var(--bg);
+  }
+
+  @media (min-width: 30rem) {
+    .readout {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .readout__item:nth-child(even) {
+      padding-left: 24px;
+    }
+  }
+
+  @media (min-width: 60rem) {
+    .readout {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    .readout__item:not(:first-child) {
+      padding-left: 24px;
+    }
+  }
+
+  .readout__value {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 56px;
+    line-height: 1;
+  }
+
+  .readout__unit {
+    font-size: 28px;
+    color: var(--text-muted);
+  }
+
+  .readout__label {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cursor {
+      animation: none;
+    }
+  }
+</style>

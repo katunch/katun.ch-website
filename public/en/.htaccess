@@ -1,0 +1,2 @@
+# Missing pages under /en/ get the English 404 page (built as en/404/index.html).
+ErrorDocument 404 /en/404/

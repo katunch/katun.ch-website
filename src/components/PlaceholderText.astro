@@ -1,0 +1,12 @@
+---
+import { splitPlaceholders } from '../lib/placeholders';
+
+// Renders text, highlighting any [PLACEHOLDER] runs that still need filling in.
+interface Props {
+  text: string;
+}
+
+const parts = splitPlaceholders(Astro.props.text);
+---
+
+{parts.map(({ text, placeholder }) => (placeholder ? <span class="placeholder">{text}</span> : text))}

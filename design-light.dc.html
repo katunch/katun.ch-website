@@ -1,0 +1,494 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Silas Knobel — Light</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;800&amp;family=Barlow:wght@400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap">
+<style>
+body{margin:0;background:#F2EFE8}
+a{color:#151513;text-decoration:none}
+a:hover{color:#000000}
+.blueprint{background-image:linear-gradient(#E3DED3 1px,transparent 1px),linear-gradient(90deg,#E3DED3 1px,transparent 1px);background-size:56px 56px;background-position:-1px -1px}
+.marquee{animation:marquee 52s linear infinite}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.cursor{animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.lift{transition:border-color .2s ease,transform .2s ease,box-shadow .2s ease}
+.lift:hover{border-color:#A39C8E;transform:translateY(-2px);box-shadow:0 14px 34px rgba(21,21,19,.08)}
+@media (prefers-reduced-motion: reduce){.marquee,.cursor{animation:none}.lift{transition:none}.lift:hover{transform:none}}
+</style>
+</helmet>
+<div style="background:#F2EFE8; color:#151513; font-family:'Barlow', system-ui, sans-serif; font-size:18px; line-height:1.55; min-height:100vh; overflow-x:hidden">
+
+<!-- ============ HEADER ============ -->
+<header style="border-bottom:1px solid #D9D4C9; background:#F2EFE8">
+<div style="max-width:1280px; margin:0 auto; padding:16px clamp(16px,4vw,48px); display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px 32px">
+<a href="#top" aria-label="Silas Knobel, back to top" style="display:flex; align-items:center; gap:12px; color:#151513; min-height:44px">
+<span style="position:relative; display:inline-flex; align-items:center; justify-content:center; width:42px; height:42px; border:1.5px solid #151513; border-radius:6px; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:21px; letter-spacing:.02em">SK<span style="position:absolute; right:-5px; top:-5px; width:10px; height:10px; border-radius:50%; background:{{accent}}"></span></span>
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:#57534C">katun.ch</span>
+</a>
+<nav aria-label="Main" style="display:flex; flex-wrap:wrap; gap:0 26px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px">
+<a href="#now" style="color:#57534C; padding:12px 0">now</a>
+<a href="#stack" style="color:#57534C; padding:12px 0">stack</a>
+<a href="#log" style="color:#57534C; padding:12px 0">runlog</a>
+<a href="#source" style="color:#57534C; padding:12px 0">source</a>
+<a href="#ride" style="color:#57534C; padding:12px 0">ride</a>
+</nav>
+<a href="#contact" class="lift" style="display:inline-flex; align-items:center; gap:10px; min-height:44px; padding:0 16px; background:#151513; border:1px solid #151513; border-radius:6px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:#F2EFE8"><span style="width:8px; height:8px; border-radius:50%; background:{{termAccent}}"></span>get in touch</a>
+</div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="{{heroClass}}" style="border-bottom:1px solid #D9D4C9">
+<div style="max-width:1280px; margin:0 auto; padding:clamp(56px,8vw,112px) clamp(16px,4vw,48px) 0">
+<p style="margin:0 0 28px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:15px; color:#3A3833"><span style="color:{{accent}}">silas@katun</span><span style="color:#67635B">:~$</span> whoami<span class="cursor" style="color:{{accent}}">▍</span></p>
+<h1 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(52px,12.5vw,190px); line-height:.84; letter-spacing:-.01em; color:#151513">Low latency.<br><span style="color:{{accent}}">High torque.</span></h1>
+
+<div style="display:flex; flex-wrap:wrap; gap:48px 64px; align-items:flex-start; margin-top:clamp(40px,5vw,64px)">
+<div style="flex:1 1 400px; min-width:0">
+<p style="margin:0; max-width:560px; font-size:clamp(18px,1.6vw,21px); color:#3A3833">I'm <strong style="color:#151513; font-weight:600">Silas Knobel</strong> — software architect and DevOps engineer from Thurgau, Switzerland. By day I design cloud platforms that stay quiet at 3 a.m. On weekends I'm on my Harley, somewhere out of signal range.</p>
+<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:36px">
+<a href="#log" class="lift" style="display:inline-flex; align-items:center; gap:10px; min-height:50px; padding:0 22px; background:{{accent}}; border:1px solid {{accent}}; border-radius:6px; color:#FBFAF7; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:15px; font-weight:500">view runlog →</a>
+<a href="#ride" class="lift" style="display:inline-flex; align-items:center; gap:10px; min-height:50px; padding:0 22px; background:#FBFAF7; border:1px solid #BDB6A8; border-radius:6px; color:#151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:15px">meet the machine</a>
+</div>
+<ul style="list-style:none; margin:40px 0 0; padding:0; display:flex; flex-wrap:wrap; gap:8px 22px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C">
+<li>Head of Operations @ Software Brauerei AG</li>
+<li>Founder @ Zenify</li>
+</ul>
+</div>
+
+<!-- terminal (stays dark) -->
+<div style="flex:1 1 500px; min-width:0">
+<div style="background:#151513; border:1px solid #151513; border-radius:10px; overflow:hidden; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; line-height:1.75; color:#EDE9E3; box-shadow:0 30px 70px rgba(21,21,19,.22)">
+<div style="display:flex; align-items:stretch; justify-content:space-between; background:#1E1E1B; border-bottom:1px solid #2A2A26">
+<div aria-hidden="true" style="display:flex; align-items:center; gap:8px; padding:0 16px">
+<span style="width:11px; height:11px; border-radius:50%; background:#3A3A34"></span>
+<span style="width:11px; height:11px; border-radius:50%; background:#3A3A34"></span>
+<span style="width:11px; height:11px; border-radius:50%; background:#3A3A34"></span>
+</div>
+<div style="display:flex">
+<button type="button" onClick="{{showBuild}}" aria-pressed="{{buildPressed}}" style="min-height:46px; padding:0 18px; border:0; border-left:1px solid #2A2A26; background:{{buildBg}}; color:{{buildColor}}; box-shadow:inset 0 -2px 0 {{buildLine}}; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; cursor:pointer">profile.yaml</button>
+<button type="button" onClick="{{showRide}}" aria-pressed="{{ridePressed}}" style="min-height:46px; padding:0 18px; border:0; border-left:1px solid #2A2A26; background:{{rideBg}}; color:{{rideColor}}; box-shadow:inset 0 -2px 0 {{rideLine}}; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; cursor:pointer">garage.yaml</button>
+</div>
+</div>
+
+<sc-if value="{{isBuild}}" hint-placeholder-val="{{ true }}">
+<div style="padding:20px 20px 24px; overflow-x:auto">
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">1</span><span style="color:#8C887F"># ~/silas/profile.yaml</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">2</span><span><span style="color:#A39F97">name:</span> Silas Knobel</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">3</span><span><span style="color:#A39F97">role:</span> Software Architect &amp; DevOps Engineer</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">4</span><span><span style="color:#A39F97">base:</span> Sirnach, Thurgau, CH</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">5</span><span><span style="color:#A39F97">now:</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">6</span><span>  <span style="color:#8C887F">-</span> Head of Operations @ Software Brauerei AG</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">7</span><span>  <span style="color:#8C887F">-</span> Founder @ Zenify</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">8</span><span><span style="color:#A39F97">languages:</span> <span style="color:#8C887F">[</span>Java, TypeScript, Ruby, Python, Bash<span style="color:#8C887F">]</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">9</span><span><span style="color:#A39F97">platform:</span> <span style="color:#8C887F">[</span>AWS, Kubernetes, OpenShift, Docker<span style="color:#8C887F">]</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">10</span><span><span style="color:#A39F97">iac:</span> <span style="color:#8C887F">[</span>Terraform, Serverless<span style="color:#8C887F">]</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">11</span><span><span style="color:#A39F97">passions:</span> <span style="color:#8C887F">[</span>harley, home-automation, electronics<span style="color:#8C887F">]</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">12</span><span><span style="color:#A39F97">motto:</span> <span style="color:{{termAccent}}">"Papa. Macher. Problemlöser."</span></span></div>
+</div>
+</sc-if>
+
+<sc-if value="{{isRide}}" hint-placeholder-val="{{ false }}">
+<div style="padding:20px 20px 24px; overflow-x:auto">
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">1</span><span style="color:#8C887F"># ~/silas/garage.yaml</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">2</span><span><span style="color:#A39F97">machine:</span> Harley-Davidson <span style="color:{{termAccent}}; border-bottom:1px dashed {{termAccent}}">[MODEL]</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">3</span><span><span style="color:#A39F97">engine:</span> <span style="color:{{termAccent}}; border-bottom:1px dashed {{termAccent}}">[ENGINE]</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">4</span><span><span style="color:#A39F97">riding_since:</span> <span style="color:{{termAccent}}; border-bottom:1px dashed {{termAccent}}">[YEAR]</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">5</span><span><span style="color:#A39F97">home_roads:</span> <span style="color:{{termAccent}}; border-bottom:1px dashed {{termAccent}}">[FAVOURITE ROAD]</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">6</span><span><span style="color:#A39F97">pre_ride_check:</span> T-CLOCS</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">7</span><span style="color:#8C887F">  # tires · controls · lights · oil · chassis · stand</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">8</span><span><span style="color:#A39F97">notifications:</span> off</span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">9</span><span><span style="color:#A39F97">pager:</span> <span style="color:#8C887F">null</span></span></div>
+<div style="display:flex; gap:18px; white-space:pre"><span style="flex:none; width:20px; text-align:right; color:#8C887F">10</span><span><span style="color:#A39F97">uptime:</span> <span style="color:{{termAccent}}">"until the tank is empty"</span></span></div>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+
+<!-- readout -->
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap:1px; background:#D9D4C9; border-top:1px solid #D9D4C9; margin-top:clamp(56px,8vw,96px)">
+<div style="background:#F2EFE8; padding:24px 24px 28px 0">
+<div style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:56px; line-height:1">23<span style="font-size:28px; color:#57534C"> yrs</span></div>
+<div style="margin-top:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C">in IT · since 2003</div>
+</div>
+<div style="background:#F2EFE8; padding:24px 24px 28px">
+<div style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:56px; line-height:1">11+<span style="font-size:28px; color:#57534C"> yrs</span></div>
+<div style="margin-top:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C">at Software Brauerei AG</div>
+</div>
+<div style="background:#F2EFE8; padding:24px 24px 28px">
+<div style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:56px; line-height:1">2026</div>
+<div style="margin-top:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C">founded Zenify</div>
+</div>
+<div style="background:#F2EFE8; padding:24px 24px 28px">
+<div style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:56px; line-height:1">47.46°<span style="font-size:28px; color:#57534C"> N</span></div>
+<div style="margin-top:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C">8.99° E · Sirnach, Thurgau</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ============ MARQUEE (asphalt band with lane line) ============ -->
+<div aria-hidden="true" style="overflow:hidden; background:#151513">
+<div style="padding:18px 0 14px">
+<div class="marquee" style="display:flex; width:max-content">
+<div style="display:flex; align-items:center; gap:28px; padding-right:28px; white-space:nowrap; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:28px; letter-spacing:.04em; text-transform:uppercase; color:#C9C5BD">
+<span>AWS</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Kubernetes</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>OpenShift</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Terraform</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Docker</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Serverless</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Microservices</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span style="color:#FBFAF7">V-Twin</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>TypeScript</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Java</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Python</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Ruby</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Bash</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span style="color:#FBFAF7">Two wheels</span><span style="color:{{termAccent}}; font-size:16px">◆</span>
+</div>
+<div style="display:flex; align-items:center; gap:28px; padding-right:28px; white-space:nowrap; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:28px; letter-spacing:.04em; text-transform:uppercase; color:#C9C5BD">
+<span>AWS</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Kubernetes</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>OpenShift</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Terraform</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Docker</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Serverless</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Microservices</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span style="color:#FBFAF7">V-Twin</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>TypeScript</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Java</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Python</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Ruby</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span>Bash</span><span style="color:{{termAccent}}; font-size:16px">◆</span><span style="color:#FBFAF7">Two wheels</span><span style="color:{{termAccent}}; font-size:16px">◆</span>
+</div>
+</div>
+</div>
+<div style="height:4px; margin:0 0 14px; background-image:repeating-linear-gradient(90deg, {{termAccent}} 0 56px, transparent 56px 96px)"></div>
+</div>
+
+<!-- ============ 01 NOW ============ -->
+<section id="now" style="padding:clamp(72px,9vw,128px) 0">
+<div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,48px)">
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px; padding-top:18px; border-top:2px solid #151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase"><span style="color:{{accent}}">01 / Now</span><span style="color:#67635B">what's running today</span></div>
+<h2 style="margin:28px 0 56px; max-width:14ch; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(44px,6.4vw,92px); line-height:.9">Currently in production.</h2>
+
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 340px), 1fr)); gap:16px">
+<article class="lift" style="display:flex; flex-direction:column; gap:18px; padding:32px; min-height:340px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px">
+<div style="display:flex; justify-content:space-between; gap:12px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#67635B"><span>Full-time · since 2014</span><span style="color:{{accent}}">[01]</span></div>
+<div>
+<h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:40px; line-height:1; text-transform:uppercase">Head of Operations</h3>
+<p style="margin:8px 0 0; font-weight:500">Software Brauerei AG</p>
+</div>
+<p style="margin:0; font-size:17px; color:#57534C">Responsible for operations at a Swiss software company: the platforms, pipelines and cloud infrastructure our teams ship on. Before that, eight years as Senior Software Engineer in the same house.</p>
+<a href="#log" style="margin-top:auto; align-self:flex-start; padding:10px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:{{accent}}">full history in the runlog ↓</a>
+</article>
+
+<article class="lift" style="display:flex; flex-direction:column; gap:18px; padding:32px; min-height:340px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px">
+<div style="display:flex; justify-content:space-between; gap:12px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#67635B"><span>Founder · since 2026</span><span style="color:{{accent}}">[02]</span></div>
+<div>
+<h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:40px; line-height:1; text-transform:uppercase">Zenify</h3>
+<p style="margin:8px 0 0; font-weight:500">Accounting &amp; back office for the self-employed</p>
+</div>
+<p style="margin:0; font-size:17px; color:#57534C">A simple back office for sole traders in Switzerland: QR invoices, customers, income and expenses, and the annual statement for the tax return. Built, run and operated by me.</p>
+<a href="https://zenify.ch" style="margin-top:auto; align-self:flex-start; padding:10px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:{{accent}}">zenify.ch ↗</a>
+</article>
+
+<article class="lift" style="display:flex; flex-direction:column; gap:18px; padding:32px; min-height:340px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px">
+<div style="display:flex; justify-content:space-between; gap:12px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:12px; letter-spacing:.06em; text-transform:uppercase; color:#67635B"><span>Side quests · always</span><span style="color:{{accent}}">[03]</span></div>
+<div>
+<h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:40px; line-height:1; text-transform:uppercase">Open source</h3>
+<p style="margin:8px 0 0; font-weight:500">Small AWS tools, shipped in the open</p>
+</div>
+<p style="margin:0; font-size:17px; color:#57534C">Cost exporters, Step Functions helpers and the occasional API wrapper. Plus a lot of home automation and electronics that never leaves the garage.</p>
+<a href="https://github.com/katunch" style="margin-top:auto; align-self:flex-start; padding:10px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:{{accent}}">github.com/katunch ↗</a>
+</article>
+</div>
+</div>
+</section>
+
+<!-- ============ 02 STACK ============ -->
+<section id="stack" style="padding:0 0 clamp(72px,9vw,128px)">
+<div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,48px)">
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px; padding-top:18px; border-top:2px solid #151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase"><span style="color:{{accent}}">02 / Stack</span><span style="color:#67635B">from cloud down to code</span></div>
+<h2 style="margin:28px 0 56px; max-width:14ch; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(44px,6.4vw,92px); line-height:.9">The stack, layer by layer.</h2>
+
+<div style="display:grid; gap:8px">
+<div class="lift" style="display:flex; flex-wrap:wrap; align-items:center; gap:16px 32px; padding:22px 26px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:8px">
+<div style="flex:0 1 300px; display:flex; align-items:baseline; gap:16px"><span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:{{accent}}">L4</span><span style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:28px; text-transform:uppercase; line-height:1">Platform</span><span style="font-size:15px; color:#67635B">where it runs</span></div>
+<div style="flex:1 1 320px; display:flex; flex-wrap:wrap; gap:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px">
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">AWS</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Kubernetes</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">OpenShift</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Serverless</span>
+</div>
+</div>
+
+<div class="lift" style="display:flex; flex-wrap:wrap; align-items:center; gap:16px 32px; padding:22px 26px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:8px">
+<div style="flex:0 1 300px; display:flex; align-items:baseline; gap:16px"><span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:{{accent}}">L3</span><span style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:28px; text-transform:uppercase; line-height:1">Infrastructure</span><span style="font-size:15px; color:#67635B">how it's built</span></div>
+<div style="flex:1 1 320px; display:flex; flex-wrap:wrap; gap:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px">
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Terraform</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Docker</span>
+</div>
+</div>
+
+<div class="lift" style="display:flex; flex-wrap:wrap; align-items:center; gap:16px 32px; padding:22px 26px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:8px">
+<div style="flex:0 1 300px; display:flex; align-items:baseline; gap:16px"><span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:{{accent}}">L2</span><span style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:28px; text-transform:uppercase; line-height:1">Architecture</span><span style="font-size:15px; color:#67635B">how it's shaped</span></div>
+<div style="flex:1 1 320px; display:flex; flex-wrap:wrap; gap:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px">
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Microservices</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">APIs</span>
+</div>
+</div>
+
+<div class="lift" style="display:flex; flex-wrap:wrap; align-items:center; gap:16px 32px; padding:22px 26px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:8px">
+<div style="flex:0 1 300px; display:flex; align-items:baseline; gap:16px"><span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:{{accent}}">L1</span><span style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:28px; text-transform:uppercase; line-height:1">Data</span><span style="font-size:15px; color:#67635B">what it remembers</span></div>
+<div style="flex:1 1 320px; display:flex; flex-wrap:wrap; gap:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px">
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">SQL</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">MongoDB</span>
+</div>
+</div>
+
+<div class="lift" style="display:flex; flex-wrap:wrap; align-items:center; gap:16px 32px; padding:22px 26px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:8px">
+<div style="flex:0 1 300px; display:flex; align-items:baseline; gap:16px"><span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:{{accent}}">L0</span><span style="font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:28px; text-transform:uppercase; line-height:1">Code</span><span style="font-size:15px; color:#67635B">what it's written in</span></div>
+<div style="flex:1 1 320px; display:flex; flex-wrap:wrap; gap:8px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px">
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Java</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">TypeScript / JavaScript</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Node</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Python</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Ruby</span>
+<span style="padding:8px 12px; border:1px solid #CFC9BD; border-radius:4px; background:#F2EFE8">Bash</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ============ 03 RUNLOG ============ -->
+<section id="log" style="padding:0 0 clamp(72px,9vw,128px)">
+<div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,48px)">
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px; padding-top:18px; border-top:2px solid #151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase"><span style="color:{{accent}}">03 / Runlog</span><span style="color:#67635B">git log --since=2003</span></div>
+<h2 style="margin:28px 0 56px; max-width:14ch; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(44px,6.4vw,92px); line-height:.9">23 years of commits.</h2>
+
+<ol style="list-style:none; margin:0; padding:0; max-width:980px">
+<li style="display:grid; grid-template-columns:minmax(92px,160px) 28px minmax(0,1fr); gap:0 18px">
+<div style="padding:24px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:#3A3833">2026 — now</div>
+<div style="position:relative; display:flex; justify-content:center"><span style="position:absolute; top:32px; bottom:0; width:1px; background:#CFC9BD"></span><span style="position:relative; margin-top:28px; width:14px; height:14px; border-radius:50%; background:{{accent}}; box-shadow:0 0 0 5px #F2EFE8"></span></div>
+<div style="padding:18px 0 26px; border-bottom:1px solid #E2DDD3">
+<div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px"><h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:clamp(26px,2.6vw,34px); line-height:1.1; text-transform:uppercase">Founder</h3><span style="padding:3px 10px; border:1px solid {{accent}}; border-radius:999px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:12px; color:{{accent}}">HEAD → main</span></div>
+<p style="margin:6px 0 0; color:#57534C">Zenify · self-employed</p>
+</div>
+</li>
+
+<li style="display:grid; grid-template-columns:minmax(92px,160px) 28px minmax(0,1fr); gap:0 18px">
+<div style="padding:24px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:#3A3833">2023 — now</div>
+<div style="position:relative; display:flex; justify-content:center"><span style="position:absolute; top:0; bottom:0; width:1px; background:#CFC9BD"></span><span style="position:relative; margin-top:28px; width:14px; height:14px; border-radius:50%; background:{{accent}}; box-shadow:0 0 0 5px #F2EFE8"></span></div>
+<div style="padding:18px 0 26px; border-bottom:1px solid #E2DDD3">
+<div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px"><h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:clamp(26px,2.6vw,34px); line-height:1.1; text-transform:uppercase">Head of Operations</h3><span style="padding:3px 10px; border:1px solid #BDB6A8; border-radius:999px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:12px; color:#57534C">running</span></div>
+<p style="margin:6px 0 0; color:#57534C">Software Brauerei AG</p>
+</div>
+</li>
+
+<li style="display:grid; grid-template-columns:minmax(92px,160px) 28px minmax(0,1fr); gap:0 18px">
+<div style="padding:24px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:#57534C">2014 — 2022</div>
+<div style="position:relative; display:flex; justify-content:center"><span style="position:absolute; top:0; bottom:0; width:1px; background:#CFC9BD"></span><span style="position:relative; margin-top:28px; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:2px solid #8C877D; background:#F2EFE8; box-shadow:0 0 0 5px #F2EFE8"></span></div>
+<div style="padding:18px 0 26px; border-bottom:1px solid #E2DDD3">
+<h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:clamp(26px,2.6vw,34px); line-height:1.1; text-transform:uppercase">Senior Software Engineer</h3>
+<p style="margin:6px 0 0; color:#57534C">Software Brauerei AG</p>
+</div>
+</li>
+
+<li style="display:grid; grid-template-columns:minmax(92px,160px) 28px minmax(0,1fr); gap:0 18px">
+<div style="padding:24px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:#57534C">2011 — 2014</div>
+<div style="position:relative; display:flex; justify-content:center"><span style="position:absolute; top:0; bottom:0; width:1px; background:#CFC9BD"></span><span style="position:relative; margin-top:28px; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:2px solid #8C877D; background:#F2EFE8; box-shadow:0 0 0 5px #F2EFE8"></span></div>
+<div style="padding:18px 0 26px; border-bottom:1px solid #E2DDD3">
+<h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:clamp(26px,2.6vw,34px); line-height:1.1; text-transform:uppercase">Senior Software Engineer</h3>
+<p style="margin:6px 0 0; color:#57534C">Swisscom · Zürich</p>
+</div>
+</li>
+
+<li style="display:grid; grid-template-columns:minmax(92px,160px) 28px minmax(0,1fr); gap:0 18px">
+<div style="padding:24px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:#57534C">2007 — 2011</div>
+<div style="position:relative; display:flex; justify-content:center"><span style="position:absolute; top:0; bottom:0; width:1px; background:#CFC9BD"></span><span style="position:relative; margin-top:28px; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:2px solid #8C877D; background:#F2EFE8; box-shadow:0 0 0 5px #F2EFE8"></span></div>
+<div style="padding:18px 0 26px; border-bottom:1px solid #E2DDD3">
+<h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:clamp(26px,2.6vw,34px); line-height:1.1; text-transform:uppercase">Senior SAP NetWeaver Consultant</h3>
+<p style="margin:6px 0 0; color:#57534C">Resource AG · Wallisellen</p>
+</div>
+</li>
+
+<li style="display:grid; grid-template-columns:minmax(92px,160px) 28px minmax(0,1fr); gap:0 18px">
+<div style="padding:24px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:#57534C">2003 — 2007</div>
+<div style="position:relative; display:flex; justify-content:center"><span style="position:absolute; top:0; height:36px; width:1px; background:#CFC9BD"></span><span style="position:relative; margin-top:28px; width:14px; height:14px; box-sizing:border-box; border-radius:50%; border:2px solid #8C877D; background:#F2EFE8; box-shadow:0 0 0 5px #F2EFE8"></span></div>
+<div style="padding:18px 0 26px">
+<div style="display:flex; flex-wrap:wrap; align-items:center; gap:8px 14px"><h3 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:600; font-size:clamp(26px,2.6vw,34px); line-height:1.1; text-transform:uppercase">Informatiker EFZ</h3><span style="padding:3px 10px; border:1px solid #BDB6A8; border-radius:999px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:12px; color:#57534C">initial commit</span></div>
+<p style="margin:6px 0 0; color:#57534C">Apprenticeship · Bühler Group, Uzwil</p>
+</div>
+</li>
+</ol>
+</div>
+</section>
+
+<!-- ============ 04 SOURCE ============ -->
+<section id="source" style="padding:0 0 clamp(72px,9vw,128px)">
+<div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,48px)">
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px; padding-top:18px; border-top:2px solid #151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase"><span style="color:{{accent}}">04 / Source</span><span style="color:#67635B">github.com/katunch</span></div>
+<h2 style="margin:28px 0 56px; max-width:16ch; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(44px,6.4vw,92px); line-height:.9">Small tools, shipped in the open.</h2>
+
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap:16px">
+<a href="https://github.com/katunch/aws-to-tempo-cost-exporter" class="lift" style="display:flex; flex-direction:column; gap:14px; padding:28px; min-height:240px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px; color:#151513">
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#67635B">katunch /</span>
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:18px; font-weight:500; overflow-wrap:anywhere">aws-to-tempo-cost-exporter</span>
+<span style="font-size:17px; color:#57534C">Exports AWS account costs into Tempo Financial Manager on a schedule. EventBridge Scheduler triggers a Lambda; Terraform sets it all up.</span>
+<span style="margin-top:auto; display:flex; gap:18px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C"><span style="display:inline-flex; align-items:center; gap:8px"><span style="width:10px; height:10px; border-radius:50%; background:#844FBA"></span>HCL</span><span>★ 1</span></span>
+</a>
+<a href="https://github.com/katunch/aws-step-functions-s3-payload" class="lift" style="display:flex; flex-direction:column; gap:14px; padding:28px; min-height:240px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px; color:#151513">
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#67635B">katunch /</span>
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:18px; font-weight:500; overflow-wrap:anywhere">aws-step-functions-s3-payload</span>
+<span style="font-size:17px; color:#57534C">A small utility to read and save payloads in AWS Step Functions via S3, for when state outgrows the payload limit.</span>
+<span style="margin-top:auto; display:flex; gap:18px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C"><span style="display:inline-flex; align-items:center; gap:8px"><span style="width:10px; height:10px; border-radius:50%; background:#F1E05A; box-shadow:inset 0 0 0 1px rgba(21,21,19,.25)"></span>JavaScript</span></span>
+</a>
+<a href="https://github.com/katunch/swisscom-sms-api" class="lift" style="display:flex; flex-direction:column; gap:14px; padding:28px; min-height:240px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px; color:#151513">
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#67635B">katunch /</span>
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:18px; font-weight:500; overflow-wrap:anywhere">swisscom-sms-api</span>
+<span style="font-size:17px; color:#57534C">A Node module for sending SMS through the Swisscom SMS API. Archived, but a good reminder of where it started.</span>
+<span style="margin-top:auto; display:flex; gap:18px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C"><span style="display:inline-flex; align-items:center; gap:8px"><span style="width:10px; height:10px; border-radius:50%; background:#244776"></span>CoffeeScript</span><span>★ 2</span><span>archived</span></span>
+</a>
+</div>
+<a href="https://github.com/katunch?tab=repositories" style="display:inline-flex; margin-top:24px; padding:10px 0; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; color:{{accent}}">all repositories ↗</a>
+</div>
+</section>
+
+<!-- ============ 05 RIDE ============ -->
+<section id="ride" style="background:#ECE8DF; border-top:1px solid #D9D4C9; border-bottom:1px solid #D9D4C9; padding:clamp(72px,9vw,128px) 0">
+<div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,48px)">
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px; padding-top:18px; border-top:2px solid #151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase"><span style="color:{{accent}}">05 / Ride</span><span style="color:#57534C">off the clock</span></div>
+<h2 style="margin:28px 0 56px; max-width:12ch; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(52px,8vw,128px); line-height:.86">Signal lost. <span style="color:{{accent}}">Road found.</span></h2>
+
+<div style="display:flex; flex-wrap:wrap; gap:48px 64px; align-items:stretch">
+<figure style="flex:1 1 420px; min-width:0; margin:0">
+<div style="position:relative; aspect-ratio:4 / 5; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; padding:24px; box-sizing:border-box; background:#FBFAF7; border:1px dashed #BDB6A8; border-radius:8px; text-align:center">
+<span aria-hidden="true" style="position:absolute; left:18px; top:18px; width:28px; height:28px; border-left:2px solid {{accent}}; border-top:2px solid {{accent}}"></span>
+<span aria-hidden="true" style="position:absolute; right:18px; top:18px; width:28px; height:28px; border-right:2px solid {{accent}}; border-top:2px solid {{accent}}"></span>
+<span aria-hidden="true" style="position:absolute; left:18px; bottom:18px; width:28px; height:28px; border-left:2px solid {{accent}}; border-bottom:2px solid {{accent}}"></span>
+<span aria-hidden="true" style="position:absolute; right:18px; bottom:18px; width:28px; height:28px; border-right:2px solid {{accent}}; border-bottom:2px solid {{accent}}"></span>
+<svg viewBox="0 0 24 24" width="40" height="40" fill="none" stroke="#57534C" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; letter-spacing:.06em; text-transform:uppercase; color:#3A3833">[ Photo: you + your Harley ]</span>
+<span style="font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#67635B">4:5 · your best shot from the road</span>
+</div>
+<figcaption style="margin-top:14px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#57534C">fig. 05 — the other production system</figcaption>
+</figure>
+
+<div style="flex:1 1 440px; min-width:0; display:flex; flex-direction:column; gap:36px">
+<p style="margin:0; font-size:clamp(19px,1.7vw,22px); color:#3A3833">When the laptop closes, the Harley comes out. No dashboards, no alerts, no on-call rotation — just a V-twin, a winding road through Eastern Switzerland and whatever the weather decides to do.</p>
+
+<div style="display:flex; flex-wrap:wrap; gap:32px; align-items:center">
+<dl style="flex:1 1 260px; min-width:0; margin:0; display:grid; grid-template-columns:auto minmax(0,1fr); font-family:'JetBrains Mono', ui-monospace, monospace; font-size:14px; border-top:1px solid #CFC9BD">
+<dt style="padding:14px 24px 14px 0; color:#57534C; border-bottom:1px solid #CFC9BD">machine</dt>
+<dd style="margin:0; padding:14px 0; border-bottom:1px solid #CFC9BD">Harley-Davidson <span style="color:{{accent}}; border-bottom:1px dashed {{accent}}">[MODEL]</span></dd>
+<dt style="padding:14px 24px 14px 0; color:#57534C; border-bottom:1px solid #CFC9BD">engine</dt>
+<dd style="margin:0; padding:14px 0; border-bottom:1px solid #CFC9BD"><span style="color:{{accent}}; border-bottom:1px dashed {{accent}}">[ENGINE]</span></dd>
+<dt style="padding:14px 24px 14px 0; color:#57534C; border-bottom:1px solid #CFC9BD">riding since</dt>
+<dd style="margin:0; padding:14px 0; border-bottom:1px solid #CFC9BD"><span style="color:{{accent}}; border-bottom:1px dashed {{accent}}">[YEAR]</span></dd>
+<dt style="padding:14px 24px 14px 0; color:#57534C; border-bottom:1px solid #CFC9BD">home roads</dt>
+<dd style="margin:0; padding:14px 0; border-bottom:1px solid #CFC9BD"><span style="color:{{accent}}; border-bottom:1px dashed {{accent}}">[FAVOURITE ROAD]</span></dd>
+<dt style="padding:14px 24px 14px 0; color:#57534C; border-bottom:1px solid #CFC9BD">side quests</dt>
+<dd style="margin:0; padding:14px 0; border-bottom:1px solid #CFC9BD">home automation, electronics</dd>
+</dl>
+
+<svg viewBox="0 0 320 290" width="100%" style="flex:0 1 260px; max-width:260px; display:block" aria-hidden="true">
+<circle cx="160" cy="160" r="130" fill="none" stroke="#D9D4C9" stroke-width="10" stroke-dasharray="612.6 816.8" transform="rotate(135 160 160)"></circle>
+<circle cx="160" cy="160" r="130" fill="none" stroke="{{accent}}" stroke-width="10" stroke-dasharray="102.1 816.8"></circle>
+<g stroke="#57534C" stroke-width="2.5" stroke-linecap="round">
+<line x1="160" y1="44" x2="160" y2="64" transform="rotate(-135 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="64" transform="rotate(-90 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="64" transform="rotate(-45 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="64"></line>
+<line x1="160" y1="44" x2="160" y2="64" transform="rotate(45 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="64" transform="rotate(90 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="64" transform="rotate(135 160 160)"></line>
+</g>
+<g stroke="#A39C8E" stroke-width="1.5" stroke-linecap="round">
+<line x1="160" y1="44" x2="160" y2="55" transform="rotate(-112.5 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="55" transform="rotate(-67.5 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="55" transform="rotate(-22.5 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="55" transform="rotate(22.5 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="55" transform="rotate(67.5 160 160)"></line>
+<line x1="160" y1="44" x2="160" y2="55" transform="rotate(112.5 160 160)"></line>
+</g>
+<g fill="#3A3833" font-family="JetBrains Mono, monospace" font-size="16" text-anchor="middle">
+<g transform="rotate(-135 160 160)"><text x="160" y="92" transform="rotate(135 160 86)">0</text></g>
+<g transform="rotate(-90 160 160)"><text x="160" y="92" transform="rotate(90 160 86)">1</text></g>
+<g transform="rotate(-45 160 160)"><text x="160" y="92" transform="rotate(45 160 86)">2</text></g>
+<text x="160" y="92">3</text>
+<g transform="rotate(45 160 160)"><text x="160" y="92" transform="rotate(-45 160 86)">4</text></g>
+<g transform="rotate(90 160 160)"><text x="160" y="92" transform="rotate(-90 160 86)">5</text></g>
+<g transform="rotate(135 160 160)"><text x="160" y="92" fill="{{accent}}" transform="rotate(-135 160 86)">6</text></g>
+</g>
+<g transform="rotate(-18 160 160)"><line x1="160" y1="176" x2="160" y2="60" stroke="{{accent}}" stroke-width="3" stroke-linecap="round"></line></g>
+<circle cx="160" cy="160" r="9" fill="#FBFAF7" stroke="#151513" stroke-width="2"></circle>
+<text x="160" y="222" fill="#57534C" font-family="JetBrains Mono, monospace" font-size="12" text-anchor="middle" letter-spacing="1">RPM ×1000</text>
+<text x="160" y="254" fill="{{accent}}" font-family="Barlow Condensed, sans-serif" font-weight="800" font-size="26" text-anchor="middle" letter-spacing="2">MODE · RIDE</text>
+</svg>
+</div>
+</div>
+</div>
+
+<h3 style="margin:clamp(64px,8vw,104px) 0 28px; font-family:'JetBrains Mono', ui-monospace, monospace; font-weight:400; font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:#57534C">What the road taught me about ops</h3>
+<div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap:16px">
+<div class="lift" style="display:flex; flex-direction:column; gap:14px; padding:28px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px">
+<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{{accent}}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 6h10M10 12h10M10 18h10"></path><path d="M3.5 6l1.5 1.5L7.5 5"></path><path d="M3.5 12l1.5 1.5L7.5 11"></path><path d="M3.5 18l1.5 1.5L7.5 17"></path></svg>
+<h4 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:30px; line-height:1; text-transform:uppercase">Pre-ride check</h4>
+<p style="margin:0; font-size:17px; color:#57534C">T-CLOCS before every ride. Health checks, smoke tests and a rollback plan before every deploy. Same discipline, different machine.</p>
+</div>
+<div class="lift" style="display:flex; flex-direction:column; gap:14px; padding:28px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px">
+<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{{accent}}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12c2.5-5 5.5-5 8 0s5.5 5 8 0c1-2 2.5-3 4-3"></path></svg>
+<h4 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:30px; line-height:1; text-transform:uppercase">Smooth is fast</h4>
+<p style="margin:0; font-size:17px; color:#57534C">Jerky inputs get you into trouble in a corner. In delivery, small, frequent, boring releases beat the big bang every time.</p>
+</div>
+<div class="lift" style="display:flex; flex-direction:column; gap:14px; padding:28px; background:#FBFAF7; border:1px solid #D9D4C9; border-radius:10px">
+<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="{{accent}}" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12h4l3-7 4 14 3-7h4"></path></svg>
+<h4 style="margin:0; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; font-size:30px; line-height:1; text-transform:uppercase">Listen to the machine</h4>
+<p style="margin:0; font-size:17px; color:#57534C">You hear a tired bearing long before it fails. Good observability lets you hear your systems the same way.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ============ 06 CONTACT ============ -->
+<section id="contact" style="padding:clamp(72px,9vw,128px) 0">
+<div style="max-width:1280px; margin:0 auto; padding:0 clamp(16px,4vw,48px)">
+<div style="display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px 24px; padding-top:18px; border-top:2px solid #151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; letter-spacing:.06em; text-transform:uppercase"><span style="color:{{accent}}">06 / Contact</span><span style="color:#67635B">let's talk</span></div>
+<h2 style="margin:28px 0 32px; max-width:13ch; font-family:'Barlow Condensed', 'Arial Narrow', sans-serif; font-weight:800; text-transform:uppercase; font-size:clamp(52px,9vw,144px); line-height:.86">Let's build something that <span style="color:{{accent}}">runs.</span></h2>
+<p style="margin:0; max-width:600px; font-size:clamp(18px,1.6vw,21px); color:#3A3833">Architecture reviews, cloud platforms, pipelines and operations — or just a good road recommendation for the weekend. Drop me a line.</p>
+<div style="display:flex; flex-wrap:wrap; gap:12px; margin-top:40px">
+<a href="#contact" class="lift" style="display:inline-flex; align-items:center; gap:10px; min-height:52px; padding:0 22px; background:{{accent}}; border:1px solid {{accent}}; border-radius:6px; color:#FBFAF7; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:15px; font-weight:500">[YOUR EMAIL]</a>
+<a href="https://www.linkedin.com/in/silasknobel" class="lift" style="display:inline-flex; align-items:center; gap:10px; min-height:52px; padding:0 22px; background:#FBFAF7; border:1px solid #BDB6A8; border-radius:6px; color:#151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:15px">linkedin ↗</a>
+<a href="https://github.com/katunch" class="lift" style="display:inline-flex; align-items:center; gap:10px; min-height:52px; padding:0 22px; background:#FBFAF7; border:1px solid #BDB6A8; border-radius:6px; color:#151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:15px">github ↗</a>
+<a href="https://zenify.ch" class="lift" style="display:inline-flex; align-items:center; gap:10px; min-height:52px; padding:0 22px; background:#FBFAF7; border:1px solid #BDB6A8; border-radius:6px; color:#151513; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:15px">zenify ↗</a>
+</div>
+</div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer style="background:#151513">
+<div style="max-width:1280px; margin:0 auto; padding:28px clamp(16px,4vw,48px); display:flex; flex-wrap:wrap; justify-content:space-between; gap:12px 32px; font-family:'JetBrains Mono', ui-monospace, monospace; font-size:13px; color:#A39F97">
+<span>© 2026 Silas Knobel · Sirnach, Thurgau, CH</span>
+<span>Papa. Macher. Problemlöser.</span>
+<span style="display:inline-flex; align-items:center; gap:8px"><span style="width:8px; height:8px; border-radius:50%; background:{{termAccent}}"></span>status: all systems nominal</span>
+</div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#B83C0C","options":["#B83C0C","#8A5A00","#0B6E8F","#151513"]},"showGrid":{"editor":"boolean","default":true},"$preview":{"width":1440,"height":7200}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#B83C0C';
+    const showGrid = this.props.showGrid ?? true;
+    const bright = { '#B83C0C': '#FF8A4C', '#8A5A00': '#F2B233', '#0B6E8F': '#5CC3E6', '#151513': '#FF8A4C' };
+    const termAccent = bright[String(accent).toUpperCase()] || '#FF8A4C';
+    const tab = (this.state && this.state.tab) || 'build';
+    const isBuild = tab === 'build';
+    return {
+      accent: accent,
+      termAccent: termAccent,
+      heroClass: showGrid ? 'blueprint' : '',
+      isBuild: isBuild,
+      isRide: !isBuild,
+      showBuild: () => this.setState({ tab: 'build' }),
+      showRide: () => this.setState({ tab: 'ride' }),
+      buildPressed: isBuild ? 'true' : 'false',
+      ridePressed: isBuild ? 'false' : 'true',
+      buildBg: isBuild ? '#151513' : 'transparent',
+      buildColor: isBuild ? '#EDE9E3' : '#A39F97',
+      buildLine: isBuild ? termAccent : 'transparent',
+      rideBg: isBuild ? 'transparent' : '#151513',
+      rideColor: isBuild ? '#A39F97' : '#EDE9E3',
+      rideLine: isBuild ? 'transparent' : termAccent
+    };
+  }
+}
+</script>
+</body>
+</html>

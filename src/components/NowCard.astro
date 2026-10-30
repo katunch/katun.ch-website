@@ -1,0 +1,67 @@
+---
+interface Props {
+  number: number;
+  meta: string;
+  title: string;
+  subtitle: string;
+  body: string;
+  link: { href: string; label: string };
+}
+
+const { number, meta, title, subtitle, body, link } = Astro.props;
+---
+
+<article class="card now-card lift">
+  <div class="now-card__meta">
+    <span>{meta}</span>
+    <span class="text-accent">[{String(number).padStart(2, '0')}]</span>
+  </div>
+  <div>
+    <h3 class="now-card__title">{title}</h3>
+    <p class="now-card__subtitle">{subtitle}</p>
+  </div>
+  <p class="now-card__body">{body}</p>
+  <a class="text-link now-card__link" href={link.href}>{link.label}</a>
+</article>
+
+<style>
+  .now-card {
+    gap: 18px;
+    min-height: 340px;
+    padding: 32px;
+  }
+
+  .now-card__meta {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+  }
+
+  .now-card__title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 40px;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  .now-card__subtitle {
+    margin-top: 8px;
+    font-weight: 500;
+  }
+
+  .now-card__body {
+    font-size: 17px;
+    color: var(--text-muted);
+  }
+
+  .now-card__link {
+    align-self: flex-start;
+    margin-top: auto;
+  }
+</style>

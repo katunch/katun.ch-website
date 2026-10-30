@@ -1,0 +1,54 @@
+---
+import { getDictionary } from '../i18n';
+import Icon from './Icon.astro';
+
+const { ui } = getDictionary(Astro.currentLocale);
+---
+
+<button
+  type="button"
+  class="icon-button theme-toggle lift"
+  data-theme-toggle
+  data-label-light={ui.themeLight}
+  data-label-dark={ui.themeDark}
+  aria-label={ui.themeLight}
+>
+  <Icon name="sun" size={18} class="theme-toggle__icon theme-toggle__icon--sun" />
+  <Icon name="moon" size={18} class="theme-toggle__icon theme-toggle__icon--moon" />
+</button>
+
+<script>
+  // The initial theme is set inline in <head> (see Base.astro) to avoid a flash.
+  type Theme = 'light' | 'dark';
+
+  const root = document.documentElement;
+  const toggle = document.querySelector<HTMLButtonElement>('[data-theme-toggle]');
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+
+  const apply = (theme: Theme) => {
+    root.dataset.theme = theme;
+    themeColor?.setAttribute('content', getComputedStyle(root).getPropertyValue('--bg').trim());
+    const label = theme === 'light' ? toggle?.dataset.labelDark : toggle?.dataset.labelLight;
+    if (label) toggle?.setAttribute('aria-label', label);
+  };
+
+  apply(root.dataset.theme === 'light' ? 'light' : 'dark');
+
+  toggle?.addEventListener('click', () => {
+    const next: Theme = root.dataset.theme === 'light' ? 'dark' : 'light';
+    try {
+      localStorage.setItem('theme', next);
+    } catch {
+      // Storage unavailable: the choice lasts for this page view only.
+    }
+    apply(next);
+  });
+</script>
+
+<style>
+  /* Show the theme you'd switch to. */
+  :global([data-theme='light']) .theme-toggle :global(.theme-toggle__icon--sun),
+  :global(:root:not([data-theme='light'])) .theme-toggle :global(.theme-toggle__icon--moon) {
+    display: none;
+  }
+</style>

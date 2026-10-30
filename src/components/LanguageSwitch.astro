@@ -1,0 +1,22 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { getDictionary, getLocale, locales } from '../i18n';
+
+// Like the theme toggle, it shows what you'd switch to: "EN" on the German page.
+const current = getLocale(Astro.currentLocale);
+const targets = locales
+  .filter((locale) => locale !== current)
+  .map((locale) => {
+    const { lang, language } = getDictionary(locale);
+    return { locale, lang, ...language, href: getRelativeLocaleUrl(locale) };
+  });
+---
+
+{
+  targets.map(({ locale, lang, code, name, href }) => (
+    <a class="icon-button lift" href={href} hreflang={locale} lang={lang}>
+      <span aria-hidden="true">{code}</span>
+      <span class="sr-only">{name}</span>
+    </a>
+  ))
+}

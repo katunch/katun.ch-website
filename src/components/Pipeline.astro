@@ -1,0 +1,159 @@
+---
+// A product's order flow drawn as a deploy pipeline: every stage passed, status live.
+interface Props {
+  /** Shown in the bar, e.g. "zenifyprint". */
+  name: string;
+  /** Accessible name of the stage list. */
+  label: string;
+  stages: { name: string; detail: string }[];
+  price: { value: string; note: string };
+}
+
+const { name, label, stages, price } = Astro.props;
+---
+
+<div class="pipeline">
+  <div class="pipeline__bar">
+    <span>{name}<span class="pipeline__path"> / pipeline</span></span>
+    <span class="pipeline__status"><span class="dot" aria-hidden="true"></span>live</span>
+  </div>
+
+  <ol class="pipeline__stages" aria-label={label}>
+    {
+      stages.map((stage, index) => (
+        <li class="stage">
+          <span class="stage__index" aria-hidden="true">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <span class="stage__name">{stage.name}</span>
+          <span class="stage__detail">{stage.detail}</span>
+          <span class="stage__check" aria-hidden="true">✓</span>
+        </li>
+      ))
+    }
+  </ol>
+
+  <p class="pipeline__price">
+    <span class="pipeline__price-value">{price.value}</span>
+    <span>{price.note}</span>
+  </p>
+</div>
+
+<style>
+  /* A dark island in both themes, like the hero terminal. */
+  .pipeline {
+    --accent: var(--term-accent);
+
+    overflow: hidden;
+    background: var(--term-bg);
+    border: 1px solid var(--term-border);
+    border-radius: 10px;
+    box-shadow: var(--term-shadow);
+    color: var(--island-text);
+    font-family: var(--font-mono);
+    font-size: 14px;
+  }
+
+  .pipeline__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 46px;
+    padding: 0 20px;
+    background: var(--term-bar);
+    border-bottom: 1px solid var(--island-line);
+    font-size: 13px;
+    color: var(--island-muted);
+  }
+
+  .pipeline__path {
+    color: var(--island-dim);
+  }
+
+  .pipeline__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 3px 10px;
+    border: 1px solid var(--island-line);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--island-text);
+  }
+
+  .pipeline__status .dot {
+    background: var(--island-ok);
+  }
+
+  .pipeline__stages {
+    margin: 0;
+    padding: 4px 20px;
+    list-style: none;
+  }
+
+  .stage {
+    display: grid;
+    grid-template-columns: 2ch 9ch minmax(0, 1fr) auto;
+    grid-template-areas: 'index name detail check';
+    align-items: baseline;
+    column-gap: 18px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--island-line);
+  }
+
+  .stage:last-child {
+    border-bottom: 0;
+  }
+
+  .stage__index {
+    grid-area: index;
+    color: var(--island-dim);
+  }
+
+  .stage__name {
+    grid-area: name;
+    font-weight: 500;
+  }
+
+  .stage__detail {
+    grid-area: detail;
+    color: var(--island-muted);
+  }
+
+  .stage__check {
+    grid-area: check;
+    color: var(--accent);
+  }
+
+  .pipeline__price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 16px;
+    padding: 18px 20px 20px;
+    border-top: 1px solid var(--island-line);
+    font-size: 13px;
+    color: var(--island-dim);
+  }
+
+  .pipeline__price-value {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 30px;
+    line-height: 1;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+
+  /* Narrow screens: the detail moves under the stage name. */
+  @media (max-width: 30rem) {
+    .stage {
+      grid-template-columns: 2ch minmax(0, 1fr) auto;
+      grid-template-areas:
+        'index name check'
+        '. detail .';
+      row-gap: 4px;
+    }
+  }
+</style>
