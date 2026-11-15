@@ -48,6 +48,7 @@ export default {
   help: {
     headline: 'Donnerstag, 19. November, ist Release-Tag.',
     remaining: 'Noch {days}, {time}.',
+    remainingTime: 'Noch {time}.',
     day: '1 Tag',
     days: '{n} Tage',
     todayHeadline: 'Heute ist Release-Tag.',

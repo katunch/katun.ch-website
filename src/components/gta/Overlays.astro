@@ -1,0 +1,103 @@
+---
+import { getGtaDictionary } from '../../i18n/gta';
+
+// Fixed overlays: the one-time "completed" banner at the end of the page and the cheat toast.
+const { banner, cheat } = getGtaDictionary(Astro.currentLocale);
+---
+
+<div class="banner" data-banner aria-hidden="true"><b>{banner.title}</b><span>{banner.text}</span></div>
+<div
+  class="toast"
+  data-toast
+  data-word={cheat.word}
+  data-title={cheat.toastTitle}
+  data-text={cheat.toastText}
+  role="status"
+  aria-live="polite"
+></div>
+
+<script>
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* End of page: a one-time "completed" banner. */
+  const banner = document.querySelector('[data-banner]');
+  const foot = document.querySelector('[data-foot]');
+  if (banner && foot && !reduce) {
+    const fo = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          banner.classList.add('is-on');
+          fo.disconnect();
+        }
+      },
+      { threshold: 0.6 },
+    );
+    fo.observe(foot);
+  }
+
+  /* Cheat: typing the last word of the claim maxes out the HUD for five seconds. */
+  const toast = document.querySelector<HTMLElement>('[data-toast]');
+  const stars = document.querySelector<HTMLElement>('[data-stars]');
+  const cash = document.querySelector<HTMLElement>('[data-cash]');
+  const word = toast?.dataset.word ?? '';
+  if (toast && stars && cash && word) {
+    const cashText = cash.textContent ?? '';
+    let buffer = '';
+    let timer = 0;
+    addEventListener('keydown', (e) => {
+      if (e.ctrlKey || e.metaKey || e.altKey || e.key.length !== 1) return;
+      buffer = (buffer + e.key.toLowerCase()).slice(-word.length);
+      if (buffer !== word) return;
+      buffer = '';
+      const title = document.createElement('strong');
+      title.textContent = toast.dataset.title ?? '';
+      toast.replaceChildren(title, ` ${toast.dataset.text ?? ''}`);
+      toast.classList.add('is-on');
+      stars.classList.add('is-wanted');
+      stars.setAttribute('aria-label', stars.dataset.hot ?? '');
+      cash.textContent = cash.dataset.cheat ?? cashText;
+      clearTimeout(timer);
+      timer = window.setTimeout(() => {
+        toast.classList.remove('is-on');
+        stars.classList.remove('is-wanted');
+        stars.setAttribute('aria-label', stars.dataset.calm ?? '');
+        cash.textContent = cashText;
+      }, 5000);
+    });
+  }
+</script>
+
+<style>
+  .banner {
+    position: fixed; inset: 0; z-index: 90; display: grid; place-content: center; text-align: center;
+    pointer-events: none; opacity: 0; visibility: hidden;
+    background: linear-gradient(180deg, transparent 34%, rgba(10, 6, 20, .72) 40%, rgba(10, 6, 20, .72) 60%, transparent 66%);
+  }
+  .banner.is-on { animation: banner 3.4s ease both; visibility: visible; }
+  .banner b {
+    display: block; font: 900 clamp(3rem, 10vw, 7rem)/.9 var(--display); color: var(--sun);
+    text-shadow: var(--outline), 6px 7px 0 var(--ink);
+  }
+  .banner span { display: block; margin-top: .4em; font: 700 clamp(1.2rem, 2.6vw, 1.7rem) var(--cond); text-shadow: var(--outline); }
+  @keyframes banner {
+    0% { opacity: 0; transform: scale(1.25); }
+    12% { opacity: 1; transform: scale(1); }
+    80% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0; transform: scale(.98); }
+  }
+  .toast {
+    position: fixed; top: 140px; left: var(--gutter); z-index: 80; max-width: 340px;
+    padding: 12px 16px; background: rgba(10, 6, 20, .9); font: 500 1rem/1.4 var(--body);
+    opacity: 0; transform: translateY(-8px); transition: opacity .2s, transform .2s; pointer-events: none;
+  }
+  .toast.is-on { opacity: 1; transform: none; }
+  /* The script fills the toast, so its <strong> carries no scope attribute. */
+  .toast :global(strong) { color: var(--sun); font-weight: 600; }
+
+  @media (max-width: 900px) {
+    .toast { top: 76px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .banner { display: none; }
+  }
+</style>

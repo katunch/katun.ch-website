@@ -13,6 +13,7 @@ const [claimA, claimB] = hero.claim;
       class="help"
       data-help
       data-remaining={help.remaining}
+      data-remaining-time={help.remainingTime}
       data-day={help.day}
       data-days={help.days}
       data-today-headline={help.todayHeadline}
@@ -24,25 +25,29 @@ const [claimA, claimB] = hero.claim;
     </div>
     <script is:inline>
       // Release countdown. Inline and right after the box, so showing it never shifts the hero below.
+      // Both dates are the visitor's local midnight: Thursday is Thursday wherever they are.
       (() => {
         const help = document.querySelector('[data-help]');
         const headline = help.querySelector('strong');
         const countdown = help.querySelector('[data-countdown]');
         const text = help.dataset;
-        const release = new Date('2026-11-19T00:00:00+01:00').getTime();
-        const dayAfter = new Date('2026-11-20T00:00:00+01:00').getTime();
+        const release = new Date(2026, 10, 19).getTime();
+        const dayAfter = new Date(2026, 10, 20).getTime();
         const pad = (n) => String(n).padStart(2, '0');
+        let timer = 0;
+        // Updates the box, then checks again: every second until the release, every minute on the day, never after it.
         function tick() {
           const now = Date.now();
           if (now >= dayAfter) {
             help.hidden = true;
-            return false;
+            return;
           }
           help.hidden = false;
           if (now >= release) {
             headline.textContent = text.todayHeadline;
             countdown.textContent = text.today;
-            return false;
+            timer = setTimeout(tick, 60000);
+            return;
           }
           let s = Math.floor((release - now) / 1000);
           const d = Math.floor(s / 86400);
@@ -51,24 +56,24 @@ const [claimA, claimB] = hero.claim;
           s -= h * 3600;
           const m = Math.floor(s / 60);
           s -= m * 60;
+          const time = pad(h) + ':' + pad(m) + ':' + pad(s);
           const days = d === 1 ? text.day : text.days.replace('{n}', String(d));
-          countdown.textContent = text.remaining.replace('{days}', days).replace('{time}', pad(h) + ':' + pad(m) + ':' + pad(s));
-          return true;
+          countdown.textContent = d ? text.remaining.replace('{days}', days).replace('{time}', time) : text.remainingTime.replace('{time}', time);
+          timer = setTimeout(tick, 1000 - (now % 1000));
         }
         let dismissed = false;
         try {
           dismissed = sessionStorage.getItem('help-closed') === '1';
         } catch (e) {}
-        if (!dismissed && tick()) {
-          const timer = setInterval(() => {
-            if (!tick()) clearInterval(timer);
-          }, 1000);
-        }
+        if (!dismissed) tick();
         help.querySelector('[data-help-close]').addEventListener('click', () => {
+          clearTimeout(timer);
           help.hidden = true;
           try {
             sessionStorage.setItem('help-closed', '1');
           } catch (e) {}
+          // The button went with the box; continue from the hero heading instead of <body>.
+          document.querySelector('[data-hero-title]').focus();
         });
       })();
     </script>
@@ -205,8 +210,8 @@ const [claimA, claimB] = hero.claim;
           </g>
         </svg>
         <div class="hero-copy">
-          <h1>{site.name}</h1>
-          <p class="claim"><span class="claim-a">{claimA}</span><span class="claim-b">{claimB}</span></p>
+          <h1 tabindex="-1" data-hero-title>{site.name}</h1>
+          <p class="claim"><span class="claim-a">{claimA}</span>{' '}<span class="claim-b">{claimB}</span></p>
           <p class="hero-lede">{hero.lede}</p>
           <div class="cta-row">
             <a class="btn" href="#contact">{hero.actions.contact}</a>
@@ -270,7 +275,7 @@ const [claimA, claimB] = hero.claim;
     </div>
 
     <div class="loadbar" data-loadbar>
-      <p class="tip" aria-live="polite"><b>{hero.tipLabel}</b><span data-tip data-tips={JSON.stringify(hero.tips)}>{hero.tips[0]}</span></p>
+      <p class="tip" aria-live="off" data-tip-box><b>{hero.tipLabel}</b>{' '}<span data-tip data-tips={JSON.stringify(hero.tips)}>{hero.tips[0]}</span></p>
       <button type="button" class="tip-next" data-tip-next>{hero.nextTip}</button>
       <div class="loading" data-loading>
         <span class="spinner" aria-hidden="true"></span><span data-loading-text data-done={hero.loaded}>{hero.loading}</span>
@@ -282,14 +287,17 @@ const [claimA, claimB] = hero.claim;
 <script>
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* Loading tips: rotate every 7 s until the visitor takes over or hovers/focuses the bar. */
+  /* Loading tips: rotate every 7 s while the bar is on screen, until the visitor takes over or hovers/focuses the bar.
+     The rotation stays silent for screen readers; only tips the visitor asks for are announced. */
   const bar = document.querySelector<HTMLElement>('[data-loadbar]');
+  const tipBox = document.querySelector<HTMLElement>('[data-tip-box]');
   const tipEl = document.querySelector<HTMLElement>('[data-tip]');
   const tips: string[] = JSON.parse(tipEl?.dataset.tips ?? '[]');
-  if (bar && tipEl && tips.length) {
+  if (bar && tipBox && tipEl && tips.length) {
     let tipI = 0;
     let tipAuto = !reduce;
     let tipPause = false;
+    let tipOnScreen = true;
     const nextTip = () => {
       tipI = (tipI + 1) % tips.length;
       tipEl.textContent = tips[tipI];
@@ -298,12 +306,16 @@ const [claimA, claimB] = hero.claim;
     bar.addEventListener('mouseleave', () => (tipPause = false));
     bar.addEventListener('focusin', () => (tipPause = true));
     bar.addEventListener('focusout', () => (tipPause = false));
+    new IntersectionObserver((entries) => {
+      tipOnScreen = entries[0]?.isIntersecting ?? true;
+    }).observe(bar);
     document.querySelector('[data-tip-next]')?.addEventListener('click', () => {
       tipAuto = false;
+      tipBox.setAttribute('aria-live', 'polite');
       nextTip();
     });
     setInterval(() => {
-      if (tipAuto && !tipPause && !document.hidden) nextTip();
+      if (tipAuto && tipOnScreen && !tipPause && !document.hidden) nextTip();
     }, 7000);
   }
 
@@ -382,7 +394,8 @@ const [claimA, claimB] = hero.claim;
   .claim-b {
     display: block; width: max-content;
     margin-top: -.02em; padding-right: .3em;
-    font: 400 clamp(2.9rem, 6.8vw, 5.4rem)/1.05 var(--script);
+    /* The floor gives way below ~390px, so "Viel Drehmoment." still fits inside the panel on a 360px phone. */
+    font: 400 clamp(min(2.9rem, 11.8vw), 6.8vw, 5.4rem)/1.05 var(--script);
     color: #ffe0ec;
     transform: rotate(-4deg); transform-origin: 0 50%;
     text-shadow: 0 0 4px #ff4f9a, 0 0 14px #ff4f9a, 0 0 34px rgba(255, 79, 154, .75), 3px 4px 0 var(--ink);
@@ -402,7 +415,8 @@ const [claimA, claimB] = hero.claim;
     border-left: 5px solid var(--sun);
   }
   .tip { margin: 0; flex: 1 1 380px; font-size: 1.05rem; min-height: 1.6em; }
-  .tip b { font: 700 1.1rem var(--cond); color: var(--sun); margin-right: .4em; }
+  /* With the space after it, the same .4em gap as without. */
+  .tip b { font: 700 1.1rem var(--cond); color: var(--sun); margin-right: .21em; }
   .tip-next {
     border: 2px solid var(--muted); background: none; color: var(--chalk);
     font: 600 .98rem var(--cond); padding: 5px 12px; cursor: pointer;
@@ -434,5 +448,12 @@ const [claimA, claimB] = hero.claim;
       background: linear-gradient(180deg, rgba(27, 16, 51, .78) 0%, rgba(27, 16, 51, .45) 48%, transparent 66%);
     }
     .loadbar { align-items: flex-start; }
+    /* Room for the longest tip, so the rotation never moves the page below: two lines (line-height 1.6),
+       three for the German tips on phones (they need it below ~403px; 420px leaves room for other
+       browsers' text metrics). Re-check both languages when the tips change. */
+    .tip { min-height: 3.2em; }
+  }
+  @media (max-width: 420px) {
+    .tip:lang(de) { min-height: 4.8em; }
   }
 </style>

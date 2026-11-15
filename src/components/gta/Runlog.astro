@@ -15,11 +15,11 @@ const { runlog } = getGtaDictionary(Astro.currentLocale);
       {
         runlog.entries.map(({ years, role, org, state, live }) => (
           <li class:list={{ 'is-live': live }}>
-            <span class="log-years">{years}</span>
+            <span class="log-years">{years}</span>{' '}
             <span>
-              <span class="log-role">{role}</span>
+              <span class="log-role">{role}</span>{' '}
               <span class="log-org">{org}</span>
-            </span>
+            </span>{' '}
             <span class="log-state">{state}</span>
           </li>
         ))

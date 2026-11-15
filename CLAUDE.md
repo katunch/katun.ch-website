@@ -33,6 +33,14 @@ There are no tests. Verify changes in a browser at 360, 390, 768 and 1440 px, in
 - **Images** go in `src/assets/` and through `astro:assets` (`PhotoSlot` takes `src` + `alt`, 4:5). Strip metadata before committing. `stelvio.jpg` has the number plate blurred on purpose; keep it that way in any re-crop.
 - **Privacy:** Silas's e-mail address must not appear on the site. Contact goes through LinkedIn/GitHub/Zenify.
 
+## GTA release variant
+
+This branch swaps the one-pager for a GTA-style version, temporary for the GTA VI release on 19 Nov 2026.
+- It's additive: `src/components/gta/` (entry `GtaHome.astro`), `src/i18n/gta/`, `src/layouts/GtaBase.astro`, `src/styles/gta.css`, `src/lib/gta-brand.ts` (icons) and two fonts in `astro.config.mjs`. Only the two index pages and the favicon/touch-icon endpoints point at it; main's components, dictionaries, `Base.astro` and `global.css` stay untouched.
+- The OG image and the 404 pages are unchanged and still use the regular design.
+- Going live means merging this branch into `main` as a merge commit (`--no-ff`); rolling back means reverting that merge on `main` (`git revert -m 1 <merge>`), which deploys the regular site again.
+- `.htaccess` caches the favicon and touch icon for a week, so returning visitors may keep seeing the GTA icon for up to a week after the rollback.
+
 ## Deploy
 
 Pushing to `main` deploys to production. `.github/workflows/deploy.yml` checks and builds the site (pull requests too), uploads `dist/` over FTPS with `lftp` to an Apache host (a dedicated FTP account whose login folder is the web root, `public_html/katun.ch`), then smoke-tests https://katun.ch. The smoke test requires the live `/` and `/en/` to match the build byte for byte, so anything that rewrites HTML on the server will fail it.

@@ -39,6 +39,8 @@ export interface GtaDictionary {
     headline: string;
     /** `{days}` is `day` or `days`, `{time}` is hh:mm:ss. */
     remaining: string;
+    /** Under 24 hours left: `{time}` only. */
+    remainingTime: string;
     day: string;
     /** `{n}` is the number of days. */
     days: string;

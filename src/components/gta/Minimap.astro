@@ -30,10 +30,12 @@ const { minimap } = getGtaDictionary(Astro.currentLocale);
 </div>
 
 <script>
-  /* Minimap: the player arrow follows the scroll position along the route; blips mark the sections. */
+  /* Minimap: the player arrow follows the scroll position along the route; blips mark the sections.
+     It only shows from 1440px, so it only listens to scrolling and resizing there. */
   const route = document.querySelector<SVGPathElement>('#mmRoute');
   const player = document.querySelector('[data-mm-player]');
   const blipG = document.querySelector('[data-mm-blips]');
+  const wide = matchMedia('(min-width: 1440px)');
   if (route && player && blipG) {
     const sections = [...document.querySelectorAll<HTMLElement>('main section[id]')];
     const length = route.getTotalLength();
@@ -74,24 +76,36 @@ const { minimap } = getGtaDictionary(Astro.currentLocale);
       player.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${deg.toFixed(1)})`);
     };
     let raf = 0;
-    addEventListener(
-      'scroll',
-      () => {
-        if (!raf)
-          raf = requestAnimationFrame(() => {
-            raf = 0;
-            movePlayer();
-          });
-      },
-      { passive: true },
-    );
+    const onScroll = () => {
+      if (!raf)
+        raf = requestAnimationFrame(() => {
+          raf = 0;
+          movePlayer();
+        });
+    };
     const redraw = () => {
       drawBlips();
       movePlayer();
     };
-    addEventListener('resize', redraw);
-    addEventListener('load', redraw);
-    redraw();
+    // The resize that crosses below 1440px fires before the media query's change event.
+    const onResize = () => {
+      if (wide.matches) redraw();
+    };
+    const toggle = () => {
+      if (wide.matches) {
+        addEventListener('scroll', onScroll, { passive: true });
+        addEventListener('resize', onResize);
+        redraw();
+      } else {
+        removeEventListener('scroll', onScroll);
+        removeEventListener('resize', onResize);
+      }
+    };
+    wide.addEventListener('change', toggle);
+    addEventListener('load', () => {
+      if (wide.matches) redraw();
+    });
+    toggle();
   }
 </script>
 

@@ -12,7 +12,11 @@ const [first] = stack.layers;
       <h2 class="title">{stack.title}</h2>
       <p class="lede">{stack.lede}</p>
       <p class="wheel-hint">
-        {stack.hint.before} <kbd aria-label={stack.hint.left}>←</kbd>{' '}{stack.hint.between}{' '}<kbd aria-label={stack.hint.right}>→</kbd>{' '}{stack.hint.after}
+        {stack.hint.before}{' '}
+        <kbd><span aria-hidden="true">←</span><span class="sr-only">{stack.hint.left}</span></kbd>{' '}
+        {stack.hint.between}{' '}
+        <kbd><span aria-hidden="true">→</span><span class="sr-only">{stack.hint.right}</span></kbd>{' '}
+        {stack.hint.after}
       </p>
     </header>
     <div class="wheel" data-wheel>
@@ -95,14 +99,15 @@ const [first] = stack.layers;
       b.addEventListener('mouseenter', () => {
         if (matchMedia('(hover: hover)').matches) select(i);
       });
+      // Arrow keys move on from the focused slot, which need not be the selected one.
       b.addEventListener('keydown', (e) => {
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
           e.preventDefault();
-          select(cur + 1, true);
+          select(i + 1, true);
         }
         if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
           e.preventDefault();
-          select(cur - 1, true);
+          select(i - 1, true);
         }
       });
     });
@@ -121,6 +126,8 @@ const [first] = stack.layers;
   .wheel {
     --size: min(500px, 88vw);
     --ring: calc(var(--size) * .23);
+    /* Initial highlight for browsers without @property; the script takes over from here. */
+    --sel: 0;
     position: relative; width: var(--size); aspect-ratio: 1; margin-inline: auto;
   }
   .wheel-ring, .wheel-sel {
@@ -160,8 +167,9 @@ const [first] = stack.layers;
     background: radial-gradient(circle at 50% 30%, #2d1750, var(--ink) 75%);
     border: 3px solid var(--chalk);
   }
-  .wc-layer { margin: 0 0 .25em; font: 900 clamp(1.5rem, 4.6vw, 2.3rem)/1 var(--display); color: var(--sun); }
-  .wc-tools { list-style: none; margin: 0; padding: 0; font: 600 clamp(.98rem, 2.8vw, 1.25rem)/1.3 var(--cond); }
+  /* Below ~520px the wheel is 88vw wide and the centre shrinks with it, so "Infrastruktur" and four tools stay inside the inner circle. */
+  .wc-layer { margin: 0 0 .25em; font: 900 min(4.6vw, 2.3rem)/1 var(--display); color: var(--sun); }
+  .wc-tools { list-style: none; margin: 0; padding: 0; font: 600 clamp(min(.98rem, 3.9vw), 2.8vw, 1.25rem)/1.3 var(--cond); }
 
   @media (max-width: 1020px) {
     .stack { grid-template-columns: 1fr; }

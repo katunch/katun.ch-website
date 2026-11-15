@@ -112,6 +112,10 @@ const star = 'M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5
     transition: background-color .15s, color .15s;
   }
   .tabs a:hover, .tabs a.is-active { background: var(--chalk); color: var(--ink); }
+  /* The scrolling strip clips anything outside the tabs, so the focus ring goes inside.
+     On a chalk tab an ink line under it keeps the yellow ring from blending in. */
+  .tabs a:focus-visible { outline-offset: -3px; }
+  .tabs a:is(:hover, .is-active):focus-visible { box-shadow: inset 0 0 0 5px var(--ink); }
 
   .hud {
     position: absolute; right: var(--gutter); top: calc(100% + 14px);

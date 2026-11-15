@@ -32,7 +32,7 @@ export default {
       { href: '#print', label: 'product' },
       { href: '#ride', label: 'ride' },
     ],
-    contact: { href: '#contact', label: 'get in touch' },
+    contact: { href: '#contact', label: 'contact' },
   },
 
   hud: {
@@ -48,6 +48,7 @@ export default {
   help: {
     headline: 'Thursday, 19 November, is release day.',
     remaining: '{days}, {time} to go.',
+    remainingTime: '{time} to go.',
     day: '1 day',
     days: '{n} days',
     todayHeadline: 'Today is release day.',
@@ -86,7 +87,7 @@ export default {
       {
         title: 'Head of Operations',
         org: 'Software Brauerei AG',
-        body: 'Responsible for operations since 2023. Before that, eight years as Senior Software Engineer in the same house.',
+        body: 'Responsible for operations since 2023. Before that, eight years as Senior Software Engineer at the same company.',
       },
       {
         title: 'Founder of Zenify',
@@ -131,7 +132,7 @@ export default {
       { years: '2011–2014', role: 'Senior Software Engineer', org: 'Swisscom', state: 'passed' },
       { years: '2014–2022', role: 'Senior Software Engineer', org: 'Software Brauerei AG', state: 'passed' },
       { years: '2023–now', role: 'Head of Operations', org: 'Software Brauerei AG', state: 'running', live: true },
-      { years: '2026', role: 'Founding', org: 'Zenify', state: 'running', live: true },
+      { years: '2026', role: 'Founder', org: 'Zenify', state: 'running', live: true },
     ],
   },
 
@@ -190,14 +191,14 @@ export default {
       specs: [
         { term: 'Engine', value: bike.engine },
         { term: 'Riding', value: `since ${bike.ridingSince}` },
-        { term: 'Fav road', value: bike.homeRoads },
+        { term: 'Favourite road', value: bike.homeRoads },
       ],
     },
     lessonsTitle: 'What operations can learn from a motorcycle',
     lessons: [
       {
         title: 'A check before every ride',
-        body: 'Tires, lights, brakes. The same goes for every deploy: checklist first, then hit the road.',
+        body: 'Tyres, lights, brakes. The same goes for every deploy: checklist first, then hit the road.',
       },
       {
         title: 'Smooth inputs',
