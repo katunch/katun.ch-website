@@ -1,0 +1,53 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { site } from '../../data/site';
+import { getLocale, locales } from '../../i18n';
+import { getGtaDictionary } from '../../i18n/gta';
+
+// Footer: neon motto, status, the other language and the disclaimer.
+const locale = getLocale(Astro.currentLocale);
+const { footer } = getGtaDictionary(locale);
+const languages = locales
+  .filter((code) => code !== locale)
+  .map((code) => {
+    const { lang, language } = getGtaDictionary(code);
+    return { code, lang, label: language.version, href: getRelativeLocaleUrl(code) };
+  });
+---
+
+<footer class="foot" data-foot>
+  <div class="wrap">
+    <div class="foot-grid">
+      <p class="motto">{footer.motto}</p>
+      <div class="foot-meta">
+        <p class="status">{footer.status}</p>
+        <p>© 2026 {site.name}, Sirnach, Thurgau, CH</p>
+        {
+          languages.map(({ code, lang, label, href }) => (
+            <p>
+              <a href={href} lang={lang} hreflang={code}>
+                {label}
+              </a>
+            </p>
+          ))
+        }
+      </div>
+    </div>
+    <p class="foot-note">{footer.note}</p>
+  </div>
+</footer>
+
+<style>
+  .foot { margin-top: clamp(90px, 13vw, 160px); padding: 44px 0 56px; position: relative; }
+  .foot::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--flamingo), var(--tangerine), var(--sun)); }
+  .foot-grid { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 24px 48px; }
+  .motto {
+    margin: 0; font: 400 clamp(2.4rem, 6vw, 3.8rem)/1.1 var(--script); color: #ffe0ec;
+    text-shadow: 0 0 4px #ff4f9a, 0 0 14px #ff4f9a, 0 0 30px rgba(255, 79, 154, .6);
+  }
+  .status { display: flex; align-items: center; gap: 10px; margin: 0 0 .4em; font: 600 1.1rem var(--cond); }
+  .status::before { content: ""; width: 12px; height: 12px; border-radius: 50%; background: var(--cash); box-shadow: 0 0 10px var(--cash); }
+  .foot-meta { color: var(--muted); font-size: 1rem; }
+  .foot-meta p { margin: 0 0 .3em; }
+  .foot-note { margin-top: 28px; font-size: .9rem; color: rgba(255, 243, 228, .55); }
+</style>

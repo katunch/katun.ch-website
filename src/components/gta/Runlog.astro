@@ -1,0 +1,56 @@
+---
+import { getGtaDictionary } from '../../i18n/gta';
+
+// "Runlog": the career as a mission list, oldest first.
+const { runlog } = getGtaDictionary(Astro.currentLocale);
+---
+
+<section class="section" id="log">
+  <div class="wrap runlog">
+    <header class="sec-head">
+      <h2 class="title">{runlog.title}</h2>
+      <p class="lede">{runlog.lede}</p>
+    </header>
+    <ol class="log">
+      {
+        runlog.entries.map(({ years, role, org, state, live }) => (
+          <li class:list={{ 'is-live': live }}>
+            <span class="log-years">{years}</span>
+            <span>
+              <span class="log-role">{role}</span>
+              <span class="log-org">{org}</span>
+            </span>
+            <span class="log-state">{state}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .runlog { display: grid; grid-template-columns: minmax(0, .8fr) minmax(0, 1.4fr); gap: 48px; align-items: start; }
+  .log { list-style: none; margin: 0; padding: 0; border: 3px solid var(--chalk); background: rgba(10, 6, 20, .55); }
+  .log li {
+    display: grid; grid-template-columns: 7.6rem minmax(0, 1fr) auto; gap: 6px 18px; align-items: center;
+    padding: 15px 20px;
+  }
+  .log li + li { border-top: 1px solid rgba(255, 243, 228, .14); }
+  .log-years { font: 700 1.25rem/1.2 var(--cond); color: var(--sun); font-variant-numeric: tabular-nums; }
+  .log-role { display: block; font-weight: 600; line-height: 1.3; }
+  .log-org { display: block; font: 500 1.05rem/1.3 var(--cond); color: var(--muted); }
+  .log-state { font: 700 .98rem/1 var(--cond); padding: 6px 10px; border: 2px solid var(--sun); color: var(--sun); white-space: nowrap; }
+  .log li.is-live { background: var(--chalk); color: var(--ink); }
+  .log li.is-live + li { border-top-color: rgba(22, 12, 41, .2); }
+  .log li.is-live .log-years { color: var(--ink); }
+  .log li.is-live .log-org { color: rgba(22, 12, 41, .75); }
+  .log li.is-live .log-state { background: var(--cash); border-color: var(--ink); color: var(--ink); }
+
+  @media (max-width: 1020px) {
+    .runlog { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 760px) {
+    .log li { grid-template-columns: minmax(0, 1fr) auto; padding: 14px 16px; }
+    .log-years { grid-column: 1 / -1; }
+  }
+</style>

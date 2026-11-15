@@ -1,0 +1,109 @@
+---
+import { getGtaDictionary } from '../../i18n/gta';
+
+// Decorative minimap (wide screens only): the scroll position as a GPS route with a blip per section.
+const { minimap } = getGtaDictionary(Astro.currentLocale);
+---
+
+<div class="minimap" aria-hidden="true">
+  <svg viewBox="0 0 200 200">
+    <defs><clipPath id="mmClip"><circle cx="100" cy="100" r="92"></circle></clipPath></defs>
+    <g clip-path="url(#mmClip)">
+      <rect width="200" height="200" fill="#22133d"></rect>
+      <path d="M120 0 H200 V70 C170 74 150 50 140 30 C132 16 124 10 120 0 Z" fill="#164b63"></path>
+      <g stroke="#3a2a5e" stroke-width="6" fill="none">
+        <path d="M0 50 H200 M0 120 H200 M0 170 H200 M40 0 V200 M150 0 V200 M0 200 L200 0"></path>
+      </g>
+      <path id="mmRoute" d="M100 196 C100 168 52 164 52 136 C52 104 148 112 148 84 C148 56 78 64 78 40 C78 22 98 14 112 8" fill="none" stroke="#8b6fd6" stroke-width="5" stroke-linecap="round"></path>
+      <g data-mm-blips></g>
+      <g data-mm-player><polygon points="0,-10 8,8 0,3 -8,8" fill="#fff3e4" stroke="#160c29" stroke-width="2" stroke-linejoin="round"></polygon></g>
+    </g>
+    <circle cx="100" cy="100" r="92" fill="none" stroke="#160c29" stroke-width="6"></circle>
+    <circle cx="100" cy="100" r="96" fill="none" stroke="#fff3e4" stroke-width="2.5"></circle>
+    <circle cx="100" cy="10" r="10" fill="#160c29" stroke="#fff3e4" stroke-width="2"></circle>
+    <text class="svg-cond" x="100" y="15" text-anchor="middle" font-size="14" fill="#fff3e4">N</text>
+  </svg>
+  <div class="mm-bars">
+    <span title={minimap.uptime}></span>
+    <span title={minimap.coffee}></span>
+  </div>
+</div>
+
+<script>
+  /* Minimap: the player arrow follows the scroll position along the route; blips mark the sections. */
+  const route = document.querySelector<SVGPathElement>('#mmRoute');
+  const player = document.querySelector('[data-mm-player]');
+  const blipG = document.querySelector('[data-mm-blips]');
+  if (route && player && blipG) {
+    const sections = [...document.querySelectorAll<HTMLElement>('main section[id]')];
+    const length = route.getTotalLength();
+    const blipColors: Record<string, string> = {
+      now: '#ffd447',
+      stack: '#ff4f9a',
+      log: '#fff3e4',
+      source: '#20d6c7',
+      print: '#72d36b',
+      ride: '#ff9142',
+      contact: '#ffd447',
+    };
+    const maxScroll = () => Math.max(1, document.documentElement.scrollHeight - innerHeight);
+    const drawBlips = () => {
+      blipG.replaceChildren(
+        ...sections
+          .filter((s) => blipColors[s.id])
+          .map((s) => {
+            const f = Math.min(1, Math.max(0, (s.offsetTop - innerHeight * 0.3) / maxScroll()));
+            const p = route.getPointAtLength(f * length);
+            const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            c.setAttribute('cx', String(p.x));
+            c.setAttribute('cy', String(p.y));
+            c.setAttribute('r', '6');
+            c.setAttribute('fill', blipColors[s.id] ?? '');
+            c.setAttribute('stroke', '#160c29');
+            c.setAttribute('stroke-width', '2.5');
+            return c;
+          }),
+      );
+    };
+    const movePlayer = () => {
+      const at = Math.min(1, scrollY / maxScroll()) * length;
+      const p = route.getPointAtLength(at);
+      const a = route.getPointAtLength(Math.max(0, at - 1.5));
+      const b = route.getPointAtLength(Math.min(length, at + 1.5));
+      const deg = (Math.atan2(b.y - a.y, b.x - a.x) * 180) / Math.PI + 90;
+      player.setAttribute('transform', `translate(${p.x.toFixed(1)} ${p.y.toFixed(1)}) rotate(${deg.toFixed(1)})`);
+    };
+    let raf = 0;
+    addEventListener(
+      'scroll',
+      () => {
+        if (!raf)
+          raf = requestAnimationFrame(() => {
+            raf = 0;
+            movePlayer();
+          });
+      },
+      { passive: true },
+    );
+    const redraw = () => {
+      drawBlips();
+      movePlayer();
+    };
+    addEventListener('resize', redraw);
+    addEventListener('load', redraw);
+    redraw();
+  }
+</script>
+
+<style>
+  .minimap { display: none; }
+  @media (min-width: 1440px) {
+    .minimap { display: block; position: fixed; left: 16px; bottom: 18px; z-index: 40; width: 136px; }
+    .minimap svg { width: 136px; height: 136px; filter: drop-shadow(4px 5px 0 rgba(0, 0, 0, .5)); }
+    .mm-bars { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; margin-top: 8px; }
+    .mm-bars span { height: 8px; background: rgba(10, 6, 20, .7); border: 2px solid var(--ink); position: relative; }
+    .mm-bars span::before { content: ""; position: absolute; inset: 0; width: var(--v); background: var(--c); }
+    .mm-bars span:nth-child(1) { --v: 100%; --c: var(--cash); }
+    .mm-bars span:nth-child(2) { --v: 70%; --c: var(--lagoon); }
+  }
+</style>

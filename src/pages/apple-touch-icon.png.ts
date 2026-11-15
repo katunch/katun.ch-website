@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { appleTouchIcon } from '../lib/brand';
+import { appleTouchIcon } from '../lib/gta-brand';
 
 export const GET: APIRoute = async () =>
   new Response(new Uint8Array(await appleTouchIcon()), { headers: { 'Content-Type': 'image/png' } });

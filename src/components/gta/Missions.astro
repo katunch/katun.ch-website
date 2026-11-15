@@ -1,0 +1,105 @@
+---
+import { getGtaDictionary } from '../../i18n/gta';
+
+// "Jetzt": the current jobs as mission cards. Artwork goes with the card at the same index.
+const { missions } = getGtaDictionary(Astro.currentLocale);
+const [operations, zenify, openSource] = missions.cards;
+---
+
+<section class="section" id="now">
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 class="title">{missions.title}</h2>
+      <p class="lede">{missions.lede}</p>
+    </header>
+    <div class="missions">
+      {
+        [operations, zenify, openSource].map((card, i) => (
+          <article class="mcard">
+            <div class="mcard-art">
+              {i === 0 && (
+                <svg viewBox="0 0 320 150" aria-hidden="true" focusable="false">
+                  <g stroke="#160c29" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+                    <path d="M160 26 V12 H246 V44" fill="none" />
+                    <path d="M96 80 Q160 18 224 80 Z" fill="#e07a3a" />
+                    <rect x="84" y="78" width="152" height="52" rx="10" fill="#e07a3a" />
+                    <path d="M98 130 V144 M222 130 V144" />
+                    <path d="M110 92 H210" stroke="#ffb06b" stroke-width="5" />
+                    <path d="M64 70 q-10 -14 0 -28 q10 -14 0 -28 M268 74 q-10 -14 0 -28 q10 -14 0 -28" fill="none" stroke-width="4" opacity=".55" />
+                  </g>
+                  <text class="svg-cond" x="160" y="122" text-anchor="middle" font-size="26" fill="#160c29">&lt;/&gt;</text>
+                </svg>
+              )}
+              {i === 1 && (
+                <svg viewBox="0 0 320 150" aria-hidden="true" focusable="false">
+                  <g stroke="#160c29" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+                    <path d="M100 14 H220 V132 L205 122 L190 132 L175 122 L160 132 L145 122 L130 132 L115 122 L100 132 Z" fill="#fff3e4" />
+                    <path d="M118 40 H170 M118 58 H200 M118 76 H186" stroke-width="4" />
+                  </g>
+                  <text class="svg-display" x="160" y="112" text-anchor="middle" font-size="30" fill="#160c29">CHF</text>
+                  <circle cx="232" cy="112" r="24" fill="#72d36b" stroke="#160c29" stroke-width="5" />
+                  <path d="M220 112 l8 8 l16 -16" fill="none" stroke="#160c29" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              )}
+              {i === 2 && (
+                <svg viewBox="0 0 320 150" aria-hidden="true" focusable="false">
+                  <g stroke="#160c29" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+                    <path d="M104 140 V78 L160 36 L216 78 V140 Z" fill="#fff3e4" />
+                    <rect x="124" y="92" width="26" height="22" fill="#ffd447" />
+                    <rect x="170" y="100" width="26" height="40" fill="#3a1a5c" />
+                    <path d="M136 24 a34 34 0 0 1 48 0 M146 34 a20 20 0 0 1 28 0" fill="none" />
+                    <path d="M222 54 h46 a14 14 0 0 0 -4 -27 a20 20 0 0 0 -37 -4 a15 15 0 0 0 -16 25 z" fill="#20d6c7" />
+                  </g>
+                  <circle cx="160" cy="42" r="4" fill="#160c29" />
+                </svg>
+              )}
+            </div>
+            <div class="mcard-body">
+              <h3>{card.title}</h3>
+              <p class="org">{card.org}</p>
+              <p>{card.body}</p>
+              {card.link && (
+                <p>
+                  <a href={card.link.href}>{card.link.label}</a>
+                </p>
+              )}
+            </div>
+          </article>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .missions { display: grid; grid-template-columns: 1.25fr 1fr 1fr; gap: 30px; align-items: start; }
+  .mcard {
+    color: var(--ink); background: var(--bg);
+    border: 4px solid var(--chalk);
+    box-shadow: 10px 10px 0 rgba(0, 0, 0, .5);
+    transform: rotate(var(--r));
+  }
+  .mcard:nth-child(1) { --bg: var(--sun); --r: -1.1deg; }
+  .mcard:nth-child(2) { --bg: var(--lagoon); --r: .9deg; margin-top: 48px; }
+  .mcard:nth-child(3) { --bg: var(--flamingo); --r: -.6deg; margin-top: 12px; }
+  .mcard-art {
+    position: relative; border-bottom: 4px solid var(--ink);
+    background: radial-gradient(rgba(22, 12, 41, .2) 1.2px, transparent 1.6px) 0 0 / 8px 8px;
+  }
+  .mcard-art svg { width: 100%; height: auto; }
+  .mcard-body { padding: 20px 22px 24px; }
+  .mcard h3 { margin: 0 0 .15em; font: 900 2.05rem/1 var(--display); }
+  .mcard .org { margin: 0 0 .7em; font: 700 1.15rem/1.2 var(--cond); }
+  .mcard p { font-size: 1.05rem; line-height: 1.5; }
+  .mcard a { font-weight: 600; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+  .mcard p:last-child { margin-bottom: 0; }
+
+  @media (max-width: 1020px) {
+    .missions { grid-template-columns: 1fr 1fr; }
+    .mcard:nth-child(1) { grid-column: 1 / -1; }
+    .mcard:nth-child(2), .mcard:nth-child(3) { margin-top: 0; }
+  }
+  @media (max-width: 760px) {
+    .missions { grid-template-columns: 1fr; }
+  }
+</style>

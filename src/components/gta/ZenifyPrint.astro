@@ -1,0 +1,93 @@
+---
+import { site } from '../../data/site';
+import { getGtaDictionary } from '../../i18n/gta';
+
+// "Produkt": ZenifyPrint, with the order flow as a mission route on a city map.
+const { product } = getGtaDictionary(Astro.currentLocale);
+const [upload, print, envelope, post, cleanup] = product.map.stops;
+const markers = [
+  { n: 1, x: 70, y: 340 },
+  { n: 2, x: 170, y: 260 },
+  { n: 3, x: 280, y: 180 },
+  { n: 4, x: 380, y: 180 },
+  { n: 5, x: 480, y: 100 },
+];
+---
+
+<section class="section" id="print">
+  <div class="wrap print">
+    <div>
+      <h2 class="title">{product.title}</h2>
+      <p class="lede">{product.lede}</p>
+      <p class="price"><span class="price-from">{product.from}</span><span class="price-amount">{product.price}</span></p>
+      <p class="price-note">{product.note}</p>
+      <a class="btn" href={site.links.zenifyPrint}>{product.link}</a>
+    </div>
+    <figure class="mapcard">
+      <svg viewBox="0 0 560 400" role="img" aria-labelledby="route-title">
+        <title id="route-title">{product.map.title}</title>
+        <rect width="560" height="400" fill="#22133d"></rect>
+        <path d="M330 0 H560 V170 C510 180 470 150 440 120 C400 80 350 70 330 40 Z" fill="#164b63"></path>
+        <path d="M330 40 C350 70 400 80 440 120 C470 150 510 180 560 170" fill="none" stroke="#20d6c7" stroke-width="2" opacity=".6"></path>
+        <ellipse cx="110" cy="120" rx="60" ry="34" fill="#25433d"></ellipse>
+        <rect x="400" y="270" width="110" height="80" rx="10" fill="#25433d"></rect>
+        <g stroke="#3a2a5e" stroke-width="12" stroke-linecap="round" fill="none">
+          <path d="M0 60 H330 M0 140 H600 M0 220 H600 M0 300 H600 M0 370 H600"></path>
+          <path d="M70 0 V400 M170 0 V400 M280 0 V400 M380 140 V400 M480 170 V400"></path>
+          <path d="M0 400 L300 140"></path>
+        </g>
+        <g stroke="#4c3a7a" stroke-width="3" fill="none"><path d="M120 0 V400 M230 0 V400 M0 100 H330 M0 260 H600 M330 180 H560"></path></g>
+        <path d="M70 340 V300 H170 V220 H280 V140 H380 V220 H480 V100" fill="none" stroke="#ffd447" stroke-width="20" opacity=".22" stroke-linejoin="round"></path>
+        <path d="M70 340 V300 H170 V220 H280 V140 H380 V220 H480 V100" fill="none" stroke="#ffd447" stroke-width="7" stroke-linejoin="round"></path>
+        <g class="svg-cond" font-size="18" text-anchor="middle">
+          {
+            markers.map(({ n, x, y }) => (
+              <>
+                <circle cx={x} cy={y} r="16" fill="#160c29" stroke="#ffd447" stroke-width="4" />
+                <text x={x} y={y + 6} fill="#ffd447">{n}</text>
+              </>
+            ))
+          }
+        </g>
+        <g class="svg-cond" font-size="20" fill="#fff3e4" stroke="#160c29" stroke-width="6" paint-order="stroke" stroke-linejoin="round">
+          <text x="96" y="347">{upload}</text>
+          <text x="196" y="267">{print}</text>
+          <text x="256" y="187" text-anchor="end">{envelope}</text>
+          <text x="406" y="187">{post}</text>
+          <text x="464" y="62" text-anchor="end">{cleanup}</text>
+        </g>
+        <polygon points="70,318 80,342 70,336 60,342" fill="#fff3e4" stroke="#160c29" stroke-width="3" stroke-linejoin="round" transform="translate(0 -28)"></polygon>
+        <g transform="translate(26 26)">
+          <circle r="15" fill="#160c29" stroke="#fff3e4" stroke-width="2"></circle>
+          <text class="svg-cond" y="6" text-anchor="middle" font-size="16" fill="#fff3e4">N</text>
+        </g>
+      </svg>
+      <figcaption class="objective">{product.objective.before}<em>{product.objective.target}</em>{product.objective.after}</figcaption>
+    </figure>
+  </div>
+</section>
+
+<style>
+  .print { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 56px; align-items: center; }
+  .price { margin: 1.2em 0 .1em; display: flex; align-items: baseline; gap: .35em; flex-wrap: wrap; }
+  .price-from { font: 700 1.6rem var(--cond); color: var(--cash); }
+  .price-amount {
+    font: 900 clamp(3.4rem, 8.4vw, 5.8rem)/.9 var(--display); color: var(--cash);
+    text-shadow: var(--outline), 5px 6px 0 var(--ink);
+    font-variant-numeric: tabular-nums;
+  }
+  .price-note { color: var(--muted); margin-bottom: 1.6em; }
+  .mapcard { margin: 0; border: 4px solid var(--chalk); background: #22133d; box-shadow: 10px 10px 0 rgba(0, 0, 0, .5); transform: rotate(.8deg); }
+  .mapcard svg { width: 100%; height: auto; }
+  .objective {
+    margin: 0; padding: 14px 18px 16px; text-align: center;
+    font: 600 1.2rem/1.35 var(--body);
+    background: rgba(10, 6, 20, .7);
+    text-shadow: 2px 2px 0 var(--ink);
+  }
+  .objective em { font-style: normal; color: var(--sun); }
+
+  @media (max-width: 1020px) {
+    .print { grid-template-columns: 1fr; }
+  }
+</style>

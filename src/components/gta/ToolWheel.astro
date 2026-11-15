@@ -1,0 +1,169 @@
+---
+import { getGtaDictionary } from '../../i18n/gta';
+
+// "Stack": the five layers as a weapon wheel. Icons go with the layer at the same index.
+const { stack } = getGtaDictionary(Astro.currentLocale);
+const [first] = stack.layers;
+---
+
+<section class="section" id="stack">
+  <div class="wrap stack">
+    <header class="sec-head">
+      <h2 class="title">{stack.title}</h2>
+      <p class="lede">{stack.lede}</p>
+      <p class="wheel-hint">
+        {stack.hint.before} <kbd aria-label={stack.hint.left}>←</kbd>{' '}{stack.hint.between}{' '}<kbd aria-label={stack.hint.right}>→</kbd>{' '}{stack.hint.after}
+      </p>
+    </header>
+    <div class="wheel" data-wheel>
+      <div class="wheel-ring" aria-hidden="true"></div>
+      <div class="wheel-sel" aria-hidden="true"></div>
+      <div class="wheel-rim" aria-hidden="true"></div>
+      <div class="wheel-center" id="wheel-center" aria-live="polite">
+        <p class="wc-layer" data-wc-layer>{first?.name}</p>
+        <ul class="wc-tools" data-wc-tools>{first?.tools.map((tool) => <li>{tool}</li>)}</ul>
+      </div>
+      {
+        stack.layers.map(({ name, tools }, i) => (
+          <button
+            type="button"
+            class="wheel-slot"
+            aria-pressed={i === 0 ? 'true' : 'false'}
+            aria-controls="wheel-center"
+            data-layer={name}
+            data-tools={tools.join('|')}
+          >
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              {i === 0 && <path d="M9 25h15a5.5 5.5 0 0 0 .5-11 8 8 0 0 0-15 2A4.5 4.5 0 0 0 9 25z" />}
+              {i === 1 && <path d="M16 4l11 6v12l-11 6-11-6V10z M5 10l11 6 11-6 M16 16v12" />}
+              {i === 2 && (
+                <>
+                  <circle cx="8" cy="8" r="3.5" />
+                  <circle cx="24" cy="8" r="3.5" />
+                  <circle cx="16" cy="24" r="3.5" />
+                  <path d="M11.5 8h9M10 11l4.5 9.5M22 11l-4.5 9.5" />
+                </>
+              )}
+              {i === 3 && (
+                <>
+                  <ellipse cx="16" cy="8" rx="10" ry="4" />
+                  <path d="M6 8v16c0 2.2 4.5 4 10 4s10-1.8 10-4V8M6 16c0 2.2 4.5 4 10 4s10-1.8 10-4" />
+                </>
+              )}
+              {i === 4 && <path d="M11 9l-7 7 7 7M21 9l7 7-7 7M18 6l-4 20" />}
+            </svg>
+            {name}
+          </button>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  /* Tool wheel: click, hover or arrow keys select a layer; the highlight takes the short way round. */
+  const wheel = document.querySelector<HTMLElement>('[data-wheel]');
+  const wcLayer = document.querySelector('[data-wc-layer]');
+  const wcTools = document.querySelector('[data-wc-tools]');
+  if (wheel && wcLayer && wcTools) {
+    const slots = [...wheel.querySelectorAll<HTMLButtonElement>('.wheel-slot')];
+    let cur = 0;
+    let selVal = 0;
+    const select = (index: number, focus = false) => {
+      const i = (index + slots.length) % slots.length;
+      let delta = i - cur;
+      if (delta > slots.length / 2) delta -= slots.length;
+      if (delta < -slots.length / 2) delta += slots.length;
+      selVal += delta;
+      cur = i;
+      wheel.style.setProperty('--sel', String(selVal));
+      slots.forEach((b, k) => b.setAttribute('aria-pressed', String(k === i)));
+      const b = slots[i];
+      if (!b) return;
+      wcLayer.textContent = b.dataset.layer ?? '';
+      wcTools.replaceChildren(
+        ...(b.dataset.tools ?? '').split('|').map((tool) => {
+          const li = document.createElement('li');
+          li.textContent = tool;
+          return li;
+        }),
+      );
+      if (focus) b.focus();
+    };
+    slots.forEach((b, i) => {
+      b.addEventListener('click', () => select(i));
+      b.addEventListener('mouseenter', () => {
+        if (matchMedia('(hover: hover)').matches) select(i);
+      });
+      b.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
+          e.preventDefault();
+          select(cur + 1, true);
+        }
+        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          select(cur - 1, true);
+        }
+      });
+    });
+  }
+</script>
+
+<style>
+  @property --sel { syntax: "<number>"; inherits: true; initial-value: 0; }
+
+  .stack { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 40px; align-items: center; }
+  .wheel-hint { margin-top: 1.4em; font: 600 1.05rem var(--cond); color: var(--sun); }
+  .wheel-hint kbd {
+    display: inline-block; min-width: 1.8em; padding: 1px 6px; margin: 0 2px;
+    border: 2px solid var(--sun); text-align: center; font: inherit;
+  }
+  .wheel {
+    --size: min(500px, 88vw);
+    --ring: calc(var(--size) * .23);
+    position: relative; width: var(--size); aspect-ratio: 1; margin-inline: auto;
+  }
+  .wheel-ring, .wheel-sel {
+    position: absolute; inset: 0; border-radius: 50%;
+    -webkit-mask: radial-gradient(closest-side, transparent calc(100% - var(--ring)), #000 calc(100% - var(--ring) + 1px));
+            mask: radial-gradient(closest-side, transparent calc(100% - var(--ring)), #000 calc(100% - var(--ring) + 1px));
+  }
+  .wheel-ring { background: repeating-conic-gradient(from -36deg, rgba(10, 6, 20, .78) 0 71deg, rgba(255, 243, 228, .55) 71deg 72deg); }
+  .wheel-sel {
+    background: conic-gradient(from calc(var(--sel) * 72deg - 36deg), var(--flamingo) 0 71deg, transparent 71deg);
+    transition: --sel .28s cubic-bezier(.3, 1.3, .5, 1);
+  }
+  .wheel-rim { position: absolute; inset: -6px; border-radius: 50%; border: 3px solid var(--chalk); pointer-events: none; }
+  .wheel-slot {
+    --a: calc(var(--i) * 72deg - 90deg);
+    --rad: calc(var(--size) / 2 - var(--ring) / 2);
+    position: absolute; left: 50%; top: 50%;
+    width: calc(var(--ring) * 1.25); height: var(--ring);
+    margin: calc(var(--ring) * -.5) 0 0 calc(var(--ring) * -.625);
+    transform: rotate(var(--a)) translate(var(--rad)) rotate(calc(-1 * var(--a)));
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+    border: 0; background: none; color: var(--chalk); cursor: pointer;
+    font: 700 clamp(.82rem, 2.4vw, 1.05rem)/1.1 var(--cond); letter-spacing: .02em;
+    border-radius: 50%;
+  }
+  /* Position on the wheel, clockwise from the top. */
+  .wheel-slot:nth-of-type(1) { --i: 0; }
+  .wheel-slot:nth-of-type(2) { --i: 1; }
+  .wheel-slot:nth-of-type(3) { --i: 2; }
+  .wheel-slot:nth-of-type(4) { --i: 3; }
+  .wheel-slot:nth-of-type(5) { --i: 4; }
+  .wheel-slot svg { width: clamp(24px, 6vw, 34px); height: auto; fill: none; stroke: currentColor; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+  .wheel-slot[aria-pressed="true"] { color: var(--ink); }
+  .wheel-center {
+    position: absolute; inset: calc(var(--ring) + 12px); border-radius: 50%;
+    display: grid; place-content: center; text-align: center; padding: 8%;
+    background: radial-gradient(circle at 50% 30%, #2d1750, var(--ink) 75%);
+    border: 3px solid var(--chalk);
+  }
+  .wc-layer { margin: 0 0 .25em; font: 900 clamp(1.5rem, 4.6vw, 2.3rem)/1 var(--display); color: var(--sun); }
+  .wc-tools { list-style: none; margin: 0; padding: 0; font: 600 clamp(.98rem, 2.8vw, 1.25rem)/1.3 var(--cond); }
+
+  @media (max-width: 1020px) {
+    .stack { grid-template-columns: 1fr; }
+  }
+</style>

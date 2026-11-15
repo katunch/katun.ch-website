@@ -1,0 +1,98 @@
+/* ==========================================================================
+   GTA release variant: tokens and shared primitives.
+   Loaded by src/layouts/GtaBase.astro only; the rest of the site uses global.css.
+   Single theme, no toggle.
+   ========================================================================== */
+
+:root {
+  --night: #1b1033;
+  --plum: #3a1a5c;
+  --flamingo: #ff4f9a;
+  --tangerine: #ff9142;
+  --sun: #ffd447;
+  --lagoon: #20d6c7;
+  --cash: #72d36b;
+  --chalk: #fff3e4;
+  --ink: #160c29;
+  --muted: rgba(255, 243, 228, .74);
+
+  /* Font families come from the Astro Font API (astro.config.mjs). */
+  --display: var(--font-gta-display);
+  --script: var(--font-gta-script);
+  --body: var(--font-body);
+  --cond: var(--font-display);
+
+  --wrap: 1120px;
+  --gutter: clamp(18px, 5vw, 48px);
+  --outline: 3px 0 var(--ink), -3px 0 var(--ink), 0 3px var(--ink), 0 -3px var(--ink),
+             2px 2px var(--ink), -2px -2px var(--ink), 2px -2px var(--ink), -2px 2px var(--ink);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+body {
+  margin: 0;
+  background:
+    radial-gradient(120% 60% at 85% 0%, rgba(255, 79, 154, .16), transparent 60%),
+    radial-gradient(90% 50% at 0% 55%, rgba(32, 214, 199, .08), transparent 60%),
+    var(--night);
+  color: var(--chalk);
+  font: 400 1.125rem/1.6 var(--body);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+img, svg { display: block; max-width: 100%; }
+a { color: inherit; }
+p { margin: 0 0 1em; }
+:focus-visible { outline: 3px solid var(--sun); outline-offset: 3px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip {
+  position: absolute; left: 12px; top: -60px; z-index: 100;
+  background: var(--sun); color: var(--ink); padding: 10px 16px;
+  font: 700 1rem var(--cond); text-decoration: none;
+}
+.skip:focus { top: 12px; }
+
+.wrap { width: min(100% - 2 * var(--gutter), var(--wrap)); margin-inline: auto; }
+
+/* SVG labels. Longhands only, so the font-size attributes still apply. */
+.svg-display { font-family: var(--display); font-weight: 900; }
+.svg-cond { font-family: var(--cond); font-weight: 700; }
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: .5em;
+  padding: .7em 1.25em;
+  font: 700 1.2rem/1 var(--cond); letter-spacing: .02em;
+  text-decoration: none; color: var(--ink);
+  background: var(--sun);
+  border: 3px solid var(--ink);
+  box-shadow: 5px 5px 0 var(--flamingo);
+  transition: transform .12s, box-shadow .12s;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--flamingo); }
+.btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0 var(--flamingo); }
+.btn-ghost { background: rgba(22, 12, 41, .55); color: var(--chalk); border-color: var(--chalk); box-shadow: 5px 5px 0 var(--ink); }
+.btn-ghost:hover { box-shadow: 7px 7px 0 var(--ink); }
+.btn-ghost:active { box-shadow: 2px 2px 0 var(--ink); }
+
+/* ---------- Sections ---------- */
+.section { padding-block: clamp(80px, 12vw, 150px) 0; }
+.sec-head { margin-bottom: clamp(36px, 5vw, 56px); }
+.title {
+  margin: 0 0 .3em;
+  font: 900 clamp(2.7rem, 6.6vw, 5rem)/.92 var(--display);
+  letter-spacing: .01em;
+  color: var(--chalk);
+  text-shadow: var(--outline), 6px 7px 0 var(--flamingo);
+}
+.lede { max-width: 56ch; font-size: 1.2rem; color: var(--muted); margin: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

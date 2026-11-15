@@ -21,7 +21,7 @@ export default defineConfig({
       provider: fontProviders.fontsource(),
       name: 'Barlow Condensed',
       cssVariable: '--font-display',
-      weights: [500, 600, 800],
+      weights: [500, 600, 700, 800],
       styles: ['normal'],
       fallbacks: ['Arial Narrow', 'sans-serif'],
     },
@@ -40,6 +40,23 @@ export default defineConfig({
       weights: [400, 500],
       styles: ['normal'],
       fallbacks: ['ui-monospace', 'monospace'],
+    },
+    // Only used by the GTA release variant (src/components/gta/).
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Passion One',
+      cssVariable: '--font-gta-display',
+      weights: [900],
+      styles: ['normal'],
+      fallbacks: ['Impact', 'Arial Black', 'sans-serif'],
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'Mr Dafoe',
+      cssVariable: '--font-gta-script',
+      weights: [400],
+      styles: ['normal'],
+      fallbacks: ['Brush Script MT', 'cursive'],
     },
   ],
 });

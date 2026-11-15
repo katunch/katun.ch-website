@@ -1,0 +1,117 @@
+---
+import { site } from '../../data/site';
+import { getGtaDictionary } from '../../i18n/gta';
+
+// "Code": the GitHub repositories as open jobs, plus the archived bonus job.
+const { source } = getGtaDictionary(Astro.currentLocale);
+const [costExporter, s3Payload] = source.repos;
+const repoUrl = (name: string) => `${site.links.github}/${name}`;
+const star = 'M12 2.5l2.9 6.1 6.6.8-4.9 4.5 1.3 6.6L12 17.2l-5.9 3.3 1.3-6.6L2.5 9.4l6.6-.8z';
+---
+
+<section class="section" id="source">
+  <div class="wrap">
+    <header class="sec-head">
+      <h2 class="title">{source.title}</h2>
+      <p class="lede">{source.lede}</p>
+    </header>
+    <div class="jobs">
+      {
+        [costExporter, s3Payload].map(
+          (repo, i) =>
+            repo && (
+              <article class="job">
+                <div class="job-art">
+                  {i === 0 && (
+                    <svg viewBox="0 0 400 150" aria-hidden="true" focusable="false">
+                      <g stroke="#160c29" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+                        <ellipse cx="96" cy="112" rx="40" ry="12" fill="#ffd447" />
+                        <path d="M56 112 v-14 M136 112 v-14" />
+                        <ellipse cx="96" cy="98" rx="40" ry="12" fill="#ffd447" />
+                        <ellipse cx="96" cy="84" rx="40" ry="12" fill="#ffd447" />
+                        <ellipse cx="96" cy="70" rx="40" ry="12" fill="#ffe680" />
+                        <path d="M160 76 H220 M204 60 L222 76 L204 92" fill="none" />
+                        <rect x="244" y="30" width="122" height="96" fill="#fff3e4" />
+                        <rect x="262" y="84" width="18" height="30" fill="#ff4f9a" />
+                        <rect x="292" y="64" width="18" height="50" fill="#20d6c7" />
+                        <rect x="322" y="46" width="18" height="68" fill="#72d36b" />
+                      </g>
+                    </svg>
+                  )}
+                  {i === 1 && (
+                    <svg viewBox="0 0 400 150" aria-hidden="true" focusable="false">
+                      <g stroke="#160c29" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+                        <rect x="34" y="52" width="76" height="46" rx="8" fill="#fff3e4" />
+                        <rect x="150" y="52" width="76" height="46" rx="8" fill="#fff3e4" />
+                        <path d="M110 75 H150 M226 75 H266" fill="none" />
+                        <path d="M270 46 H362 L350 126 H282 Z" fill="#ffd447" />
+                        <ellipse cx="316" cy="46" rx="46" ry="11" fill="#ffe680" />
+                      </g>
+                      <text class="svg-display" x="316" y="100" text-anchor="middle" font-size="28" fill="#160c29">S3</text>
+                      <text class="svg-cond" x="72" y="83" text-anchor="middle" font-size="20" fill="#160c29">Step</text>
+                      <text class="svg-cond" x="188" y="83" text-anchor="middle" font-size="20" fill="#160c29">Step</text>
+                    </svg>
+                  )}
+                </div>
+                <div class="job-body">
+                  <p class="job-kind">{repo.kind}</p>
+                  <h3>{repo.name}</h3>
+                  <dl>
+                    {repo.facts.map(({ term, value }) => (
+                      <>
+                        <dt>{term}</dt>
+                        <dd>{value}</dd>
+                      </>
+                    ))}
+                  </dl>
+                  <a class="btn" href={repoUrl(repo.name)}>{source.open}</a>
+                </div>
+              </article>
+            ),
+        )
+      }
+      <article class="job job-bonus">
+        <div class="job-art">
+          <svg viewBox="0 0 260 60" aria-hidden="true" focusable="false">
+            <g fill="#ffd447" stroke="#fff3e4" stroke-width="2" stroke-linejoin="round">
+              {[4, 54, 104, 154, 204].map((x) => <path transform={`translate(${x} 6) scale(2)`} d={star} />)}
+            </g>
+          </svg>
+        </div>
+        <div class="job-body">
+          <p class="job-kind">{source.bonus.kind}</p>
+          <h3>{source.bonus.name}</h3>
+          <p>{source.bonus.body}</p>
+          <a class="btn btn-ghost" href={repoUrl(source.bonus.name)}>{source.open}</a>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<style>
+  .jobs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px; }
+  .job { display: flex; flex-direction: column; background: var(--plum); border: 3px solid var(--chalk); box-shadow: 10px 10px 0 rgba(0, 0, 0, .45); }
+  .job-art { border-bottom: 3px solid var(--chalk); background: linear-gradient(135deg, var(--flamingo), var(--tangerine)); }
+  .job:nth-child(2) .job-art { background: linear-gradient(135deg, var(--lagoon), #6a5bd8); }
+  .job-art svg { width: 100%; height: auto; }
+  .job-body { display: flex; flex-direction: column; flex: 1; padding: 22px 24px 26px; }
+  .job-kind { margin: 0 0 .3em; font: 700 1.05rem var(--cond); color: var(--sun); }
+  .job h3 { margin: 0 0 .7em; font: 700 clamp(1.35rem, 2.6vw, 1.75rem)/1.15 var(--cond); overflow-wrap: anywhere; }
+  .job dl { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 6px 18px; margin: 0 0 1.4em; }
+  .job dt { font: 600 1.05rem/1.5 var(--cond); color: var(--muted); }
+  .job dd { margin: 0; line-height: 1.5; }
+  .job .btn { margin-top: auto; align-self: flex-start; }
+  .job-bonus {
+    grid-column: 1 / -1; flex-direction: row; align-items: stretch;
+    background: rgba(10, 6, 20, .6); border-style: dashed;
+  }
+  .job-bonus .job-art { flex: 0 0 34%; border-bottom: 0; border-right: 3px dashed var(--chalk); background: var(--ink); display: grid; place-items: center; padding: 20px; }
+  .job-bonus .job-art svg { max-width: 260px; }
+
+  @media (max-width: 760px) {
+    .jobs { grid-template-columns: 1fr; }
+    .job-bonus { flex-direction: column; }
+    .job-bonus .job-art { flex: none; border-right: 0; border-bottom: 3px dashed var(--chalk); }
+  }
+</style>
