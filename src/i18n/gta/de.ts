@@ -21,6 +21,9 @@ export default {
     skipLink: 'Zum Inhalt springen',
     home: `${site.name}, zum Seitenanfang`,
     mainNav: 'Hauptnavigation',
+    menuOpen: 'Menü öffnen',
+    menuClose: 'Menü schliessen',
+    menu: 'Menü',
   },
 
   nav: {

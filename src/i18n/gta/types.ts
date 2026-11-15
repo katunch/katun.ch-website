@@ -6,7 +6,7 @@ export interface GtaDictionary {
   lang: string;
   /** Open Graph locale, e.g. de_CH. */
   ogLocale: string;
-  /** How the pause-menu tab and the footer link offer this language, written in this language. */
+  /** How the pause-menu language switch and the footer link offer this language, written in this language. */
   language: { name: string; version: string };
 
   meta: { title: string; description: string };
@@ -17,9 +17,14 @@ export interface GtaDictionary {
     /** Accessible name of the SK link to the top of the page. */
     home: string;
     mainNav: string;
+    /** Accessible names of the burger button below the desktop breakpoint, closed and open. */
+    menuOpen: string;
+    menuClose: string;
+    /** Heading of the open menu overlay. */
+    menu: string;
   };
 
-  /** Pause-menu tabs. The language tab sits between `sections` and `contact`. */
+  /** Pause-menu tabs. The language switch comes after `contact`: at the right end of the bar, at the bottom of the menu overlay. */
   nav: {
     sections: { href: string; label: string }[];
     contact: { href: string; label: string };

@@ -21,6 +21,9 @@ export default {
     skipLink: 'Skip to content',
     home: `${site.name}, back to top`,
     mainNav: 'Main',
+    menuOpen: 'Open menu',
+    menuClose: 'Close menu',
+    menu: 'Menu',
   },
 
   nav: {
