@@ -38,7 +38,7 @@ There are no tests. Verify changes in a browser at 360, 390, 768 and 1440 px, in
 This branch swaps the one-pager for a GTA-style version, temporary for the GTA VI release on 19 Nov 2026.
 - It's additive: `src/components/gta/` (entry `GtaHome.astro`), `src/i18n/gta/`, `src/layouts/GtaBase.astro`, `src/styles/gta.css`, `src/lib/gta-brand.ts` (icons) and two fonts in `astro.config.mjs`. Only the two index pages and the favicon/touch-icon endpoints point at it; main's components, dictionaries, `Base.astro` and `global.css` stay untouched.
 - The OG image and the 404 pages are unchanged and still use the regular design.
-- Going live means merging this branch into `main` as a merge commit (`--no-ff`); rolling back means reverting that merge on `main` (`git revert -m 1 <merge>`), which deploys the regular site again.
+- `.github/workflows/deploy-gta.yml` (a copy of `deploy.yml`) deploys this branch: **pushing `feature/gta-release` goes live**, so don't push it without being asked. It needs `feature/gta-release` in the `production` environment's allowed deployment branches. Rolling back means running the `Deploy` workflow on `main` (Actions → Deploy → Run workflow); `main` itself is never touched.
 - `.htaccess` caches the favicon and touch icon for a week, so returning visitors may keep seeing the GTA icon for up to a week after the rollback.
 
 ## Deploy
